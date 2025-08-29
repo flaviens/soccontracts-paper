@@ -39,43 +39,30 @@ The communication between these components is typically managed through standard
 Note that the bounds of components are not always clear-cut.
 For example, caches can be considered part of the CPU or of the platform.
 
-% Contracts
-
 \subsection{Timing side-channels}
 
-\begin{lstlisting}[caption={Minimal Spectre V1 transmitter example~\cite{kocher2019spectre}},label={lst:spectrev1}]
-uint8_t array1[16], array2[256*512];
-size_t array1_size = 16;
+Multiple hardware optimizations, such as caches and branch predictors, learn and exploit patterns in program execution to improve performance.
+In particular, the execution time of later instructions may depend on the outcome of earlier instructions.
+For example, accessing a cache line might be faster if the line has been brought into the cache recently by a prior memory access to a nearby location.
+Timing side channels can result from such optimizations when the timing of a program's execution depends on secret data.
+Constant-time programming techniques, such as not using secret data as array indices, aim to ensure that secrets do not influence the execution time of a program through such channels~\cite{}.
 
-uint8_t victim(size_t x) {
-  if (x < array1_size)
-    return array2[array1[x] * 512];
+
+\subsection{Hardware-software contracts}
+\label{subsec:hw-sw-contracts}
+
+{\color{cyan}{
+    To understand information propagation and split responsibilities between hardware and software, past work has formalized the sequence of observable events produced by a CPU when executing a given program as a function of the initial microarchitectural state, the program and the data in memory.
+    This observation sequence is referred to as a hardware trace~\cite{oleksenko2022revizor}.
+    Possible hardware traces are specified as a contract~\cite{guarnieri2021hardware}, which stipulates an execution mode and an observation mode.
+    The \emph{execution mode} determines which instructions will be executed and cause observable events, in addition to the instructions architecturally present in the executed program.
+    The \emph{observation mode} determines the events that are exposed to the observer by (potentially transiently) executed instructions when executing the program, for example, disclosing addresses or values that correspond to memory accesses.
+
+    Non-interference properties express that the observable behavior of a CPU is independent of the secret data processed by the CPU, and hence these properties include the notion of secret information. 
+    Formally, a CPU implementation satisfies a non-interference property if for all programs $P$ (in this paper, programs include public memory valuations $M_p$ in addition to the instructions) and for all pairs of secret valuations $M_s$ and $M'_s$, Equation~\ref{eq:isatrace} implies Equation~\ref{eq:microtrace}, i.e., if the ISA observations for the pairs $(P, M_s)$ and $(P, M'_s)$ are identical, then the microarchitectural observations for the pairs $(P, M_s)$ and $(P, M'_s)$ are also identical.
+    For example, this can stipulate that if a program is written in some constant-time form with respect to secret data (Equation~\ref{eq:isatrace}), then when the CPU executes this program, the instruction commit timing will not reveal secret information (Equation~\ref{eq:microtrace}).
 }
-\end{lstlisting}
 
-A timing side-channel occurs when the execution time of a program is influenced by secret data.
-This concept is closely related to information flows, where the value of a secret variable might influence some elements that encode the execution timing, such as the program counter~\cite{ceesay2024mucfi} or some instruction commit signal~\cite{tan2025contractshadowlogic,dinesh2024conjunct,dinesh2025h}.
-A timing side-channel can occur architecturally.
-For example, the program's architectural control flow is secret-dependent when the condition of an \texttt{if} clause or of a loop is secret-dependent~\cite{kocher1996timing}.
-Cache side-channels~\cite{bonneau2006cache,bernstein2005cache} can also leak information when the existence of secret memory operations or their addresses are secret-dependent.
-Constant-time programming techniques consist in ensuring that secrets do not influence the execution time of a program through such architectural channels.
-
-However, due to implementation bugs or microarchitectural effects, the timing of a program can also be secret-dependent despite the program being constant-time architecturally~\cite{kocher2019spectre,lipp2018meltdown,armsecure,bhattacharyya2019smotherspectre,van2018foreshadow,canella2019fallout,horn2018speculative,maisuradze2018ret2spec,schwarz2019zombieload,schwarz2019netspectre,stecklina2018lazyfp,van2019ridl,ragab2021crosstalk,van2020lvi,van2021cacheout,ragab2021rage}.
-In the case of information disclosure through the microarchitecture, the instruction that encodes the secret information into the microarchitecture is referred to as the transmitter instruction, while the instruction that makes the secret information observable is referred to as the receiver instruction~\cite{kiriansky2018dawg}.
-For example, in the Spectre v1 scenario where the victim gadget is illustrated in Listing~\ref{lst:spectrev1}, the access to the entry in \texttt{array2} is the transmitter instruction as it encodes a secret into the cache control state, while the subsequent cache attack, not shown in the listing, has receiver instructions.
-
-\subsection{Non-Interference Properties}
-\label{subsec:non-interference}
-
-To understand information propagation and split responsibilities between hardware and software, past work has formalized the sequence of observable events produced by a CPU when executing a given program as a function of the initial microarchitectural state, the program and the data in memory.
-This observation sequence is referred to as a hardware trace~\cite{oleksenko2022revizor}.
-Possible hardware traces are specified as a contract~\cite{guarnieri2021hardware}, which stipulates an execution mode and an observation mode.
-The \emph{execution mode} determines which instructions will be executed and cause observable events, in addition to the instructions architecturally present in the executed program.
-The \emph{observation mode} determines the events that are exposed to the observer by (potentially transiently) executed instructions when executing the program, for example, disclosing addresses or values that correspond to memory accesses.
-
-Non-interference properties express that the observable behavior of a CPU is independent of the secret data processed by the CPU, and hence these properties include the notion of secret information. 
-Formally, a CPU implementation satisfies a non-interference property if for all programs $P$ (in this paper, programs include public memory valuations $M_p$ in addition to the instructions) and for all pairs of secret valuations $M_s$ and $M'_s$, Equation~\ref{eq:isatrace} implies Equation~\ref{eq:microtrace}, i.e., if the ISA observations for the pairs $(P, M_s)$ and $(P, M'_s)$ are identical, then the microarchitectural observations for the pairs $(P, M_s)$ and $(P, M'_s)$ are also identical.
-For example, this can stipulate that if a program is written in some constant-time form with respect to secret data (Equation~\ref{eq:isatrace}), then when the CPU executes this program, the instruction commit timing will not reveal secret information (Equation~\ref{eq:microtrace}).
 
 % \fls{Maybe add some more detail}
 % \fls{R3. There is a significant amount of jargon related to security and side-channel attacks that is likely not familiar to the average ICCAD attendee, and is not really adequately introduced or explained.}
@@ -95,6 +82,8 @@ For example, this can stipulate that if a program is written in some constant-ti
 \para{Discussion}
 Verifying non-interference properties raises challenges not only in terms of properly mapping the property to the design under verification, but also in terms of completeness and performance.
 Existing work has proposed various approaches to address these challenges, including decisions on the observation mode and specific assumptions that accelerate the verification process.
+}
+
 
 % In the rest of this paper, we consider $M_p$ as part of the program $P$.
 % Intuitively, non-interference properties express that an observer cannot infer more information about the input of a program execution on a given CPU than what is allowed in a given contract.

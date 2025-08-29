@@ -1,6 +1,7 @@
 % !TeX root = ../main.tex
 % !TeX spellcheck = en_US
 
+\textcolor{red}{Should not only be about uarch. Should also be about archi leakage also?}
 Microarchitectural attacks are software-driven techniques that exploit behaviors below the ISA to encode and reveal secrets through measurable side effects, most commonly execution time.
 By carefully choreographing benign-looking instruction sequences, an attacker steers microarchitectural state, such as caches, TLBs, execution ports, branch predictors, DRAM buffers, to make secret-dependent effects externally observable.
 Two broad families have emerged: transient/speculative-execution attacks~\cite{kocher2019spectre,lipp2018meltdown,armsecure,bhattacharyya2019smotherspectre,van2018foreshadow,canella2019fallout,horn2018speculative,maisuradze2018ret2spec,schwarz2019zombieload,schwarz2019netspectre,stecklina2018lazyfp,van2019ridl,ragab2021crosstalk,van2020lvi,van2021cacheout,ragab2021rage,wikner2022retbleed,trujillo2023inception,wikner2023phantom,wikner2024breaking,wikner2025bpi}, which leave secret-dependent footprints during mis-speculated execution, and contention-driven channels on shared resources~\cite{bernstein2005cache,bonneau2006cache,Liu2015LLC,YaromFalkner2014FlushReload,Gras2018TLBleed,Aldaya2019PortSmash,Yarom2016CacheBleed,Moghimi2018MemJam,Gruss2016PrefetchSCA,Pessl2016DRAMA}, which measure or induce interference to encode information.
