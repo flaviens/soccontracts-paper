@@ -1,0 +1,94 @@
+% !TeX root = ../main.tex
+% !TeX spellcheck = en_US
+
+Microarchitectural attacks are software-driven techniques that exploit behaviors below the ISA to encode and reveal secrets through measurable side effects, most commonly execution time.
+By carefully choreographing benign-looking instruction sequences, an attacker steers microarchitectural state, such as caches, TLBs, execution ports, branch predictors, DRAM buffers, to make secret-dependent effects externally observable.
+Two broad families have emerged: transient/speculative-execution attacks~\cite{kocher2019spectre,lipp2018meltdown,armsecure,bhattacharyya2019smotherspectre,van2018foreshadow,canella2019fallout,horn2018speculative,maisuradze2018ret2spec,schwarz2019zombieload,schwarz2019netspectre,stecklina2018lazyfp,van2019ridl,ragab2021crosstalk,van2020lvi,van2021cacheout,ragab2021rage,wikner2022retbleed,trujillo2023inception,wikner2023phantom,wikner2024breaking,wikner2025bpi}, which leave secret-dependent footprints during mis-speculated execution, and contention-driven channels on shared resources~\cite{bernstein2005cache,bonneau2006cache,Liu2015LLC,YaromFalkner2014FlushReload,Gras2018TLBleed,Aldaya2019PortSmash,Yarom2016CacheBleed,Moghimi2018MemJam,Gruss2016PrefetchSCA,Pessl2016DRAMA}, which measure or induce interference to encode information.
+These attacks pose a durable, cross-generation threat to modern processors, in particular because they can be mounted entirely in software, without special privileges or hardware access.
+Mitigation is notoriously difficult once silicon has shipped: the leakage channels are entwined with performance-critical design choices.
+Software or microcode defenses are often partial~\cite{ridlad} or impose significant overheads.
+
+To inform software developers about the potential side effects of their code on a given contract-compliant CPU, recent work has introduced hardware-software contracts~\cite{guarnieri2021hardware,oleksenko2022revizor}.
+As a result, several techniques have been proposed to formally verify that a CPU implementation complies with such contracts~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} to prevent confidentiality breaches before chip fabrication.
+
+\para{Platform timing channels}
+CPUs are often verified in isolation~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} before integration into a larger system, often for scalability reasons.
+Yet hardware-software contracts make assumptions on the system into which a CPU will be integrated.
+For example, the constant-time contract observer mode~\cite{guarnieri2021hardware} exposes the program counter of every executed instruction, and the addresses of all memory operations.
+This observation mode accounts for the timing effects of caches and other elements of the memory hierarchy~\cite{guarnieri2021hardware,oleksenko2022revizor}.
+Other contract observation modes exist, for example the architectural observer, which additionally discloses values exchanged with memory.
+These aspects of hardware-contracts are proper to the platform (i.e., the broader SoC) into which the CPU will be integrated, yet many verification techniques do not account for them or provide this flexibility.
+
+\para{Platform timing contracts}
+Platform timing contracts extend the idea of hardware-software contracts to encompass the broader system context in which a CPU operates.
+They aim to capture the timing behavior of the entire platform, including interactions with other components such as memory controllers, I/O devices, and interconnects.
+By considering these interactions, platform timing contracts can provide a more comprehensive understanding of potential timing channels and their implications for security.
+To verify the compliance of a CPU integrated into a specific platform using existing techniques that verify a CPU in isolation, we introduce an automatic instrumentation that captures the relevant platform-specific timing information while retaining compatibility with all existing hardware-software contract verification techniques.
+
+We establish the platform timing contracts for \textcolor{red}{3} different platforms.
+We apply the instrumentation corresponding to each platform to the \textcolor{red}{4} RISC-V CPUs \textcolor{red}{TODO List them}.
+Not only does the verification time increase by not more than ~\textcolor{red}{5}\%, but we demonstrate the existence of platform-specific timing channels on typical platforms, that would otherwise be missed.
+
+In summary, our contributions in this paper are:
+\begin{itemize}
+    \item We introduce \pics.
+    \item We implement an open-source lightweight CPU instrumentation that accounts for all platform-induced timing side-channels.
+    \item We apply instrumentations corresponding to various platforms to the 4 RISC-V CPUs to capture platform-specific timing information and show that these platforms can introduce unique timing channels that may not be present in isolated CPU verification and that would be missed by some existing verification techniques.
+\end{itemize}
+
+\vspace*{0.5em}
+All our experiments can be found at: \url{https://placeholder/} 
+
+% % TODO Say the importance of platform side channels.
+
+% % Microarchitectural attacks exploit subtle CPU features to encode and leak sensitive information through program execution time. Because they can be mounted entirely from software, they pose a significant long-term threat to modern CPUs.
+% % They may exploit speculative execution~\cite{kocher2019spectre,lipp2018meltdown,armsecure,bhattacharyya2019smotherspectre,van2018foreshadow,canella2019fallout,horn2018speculative,maisuradze2018ret2spec,schwarz2019zombieload,schwarz2019netspectre,stecklina2018lazyfp,van2019ridl,ragab2021crosstalk,van2020lvi,van2021cacheout,ragab2021rage} or resource contention~\cite{bernstein2005cache,bonneau2006cache,Liu2015LLC,YaromFalkner2014FlushReload,Gras2018TLBleed,Aldaya2019PortSmash,Yarom2016CacheBleed,Moghimi2018MemJam,Gruss2016PrefetchSCA,Pessl2016DRAMA}.
+% % They are notoriously difficult to mitigate once hardware has been fabricated.
+
+% Traditionally, these vulnerabilities were looked for manually~\cite{dessouky2019hardfails} or using dynamic techniques that are as good as their test cases~\cite{weber2021osiris,ghaniyoun2021introspectre,de2025phantom,hur2022specdoctor,rostami2024lost,borkar2024whisperfuzz,oleksenko2022revizor}.
+% Recently, advances in speculation contracts~\cite{guarnieri2021hardware} and relational reasoning~\cite{oleksenko2022revizor} have formalized the problem of proving the absence of timing channels in CPUs as a \emph{non-interference} property.
+% Intuitively, a CPU complies with such a non-interference property if the program's secret data does not affect the CPU's observable behavior, if the program complies with some understanding of constant-time property.
+% For example, the program shall not use the secret data as the input to a branch if adversaries can observe branch decisions.
+% Such program constraints can be understood as variants of constant-time programming.
+
+% Several dedicated verification schemes have been proposed in the last few years.
+% They formally prove the absence of an information leakage from secret data to observable channels such as timing, generally based on one of two properties named \emph{Safe Instruction Set} (SIS) and the stronger \emph{Speculative Non-Interference} (SNI).
+% Despite being different properties, both guarantee that secret information computed in a CPU cannot be inferred from the system's observable behavior if the software is written in a constant-time manner.
+% However, all the so-far-proposed techniques for formally proving constant-time properties in CPUs make explicit or implicit assumptions on the system into which the CPU will be integrated, and on the implementation of the CPU under verification or on the systems that integrate it.
+% \fls{We might also say something about the threat model / about SoCs that have external IPs.}
+
+% \para{\Pics}
+% Some information flows that can reveal secrets might exit the CPU to reenter it and affect its timing, and might escape the scope of verification techniques through these reentrant paths. 
+% The existence and nature of such reentrant information flows depend on the system into which the CPU is integrated.
+% Yet, no existing constant-time verification technique addresses this issue explicitly.
+% Some techniques ignore reentrant information flows altogether~\cite{ceesay2024mucfi,dinesh2024conjunct,dinesh2024conjunct}.
+% We will see that this can lead to missing vulnerabilities that would be otherwise detectable when the CPU is integrated into a larger system.
+% Others techniques may assume the existence of address-dependent timing channels~\cite{wang2023specification,tan2025contractshadowlogic}, due for example to caches present in the system.
+% To address this issue, we introduce \pics, a simple specification of the reentrant information flows that exit and reenter the CPU.
+% Based on this specification, we introduce an automatic lightweight instrumentation that augments a CPU with a synthesizable summary of all the potential reentrant information flows from the platform that integrates the CPU.
+
+% \para{Assumptions in constant-time verification}
+% We note that unsoundness is not only due to reentrant information flows, but also due to assumptions made by the verification techniques.
+% We analyze the assumptions that underpin the automatic state-of-the-art non-interference property verification techniques, once the reentrant flow challenge is addressed.
+% We find that these assumptions can be categorized into three classes.
+% (a) The \emph{Correctness Assumption}: a CPU shall be exempt from functional bugs.
+% % In this paper, we find that a well-defined class of functional correctness bugs, which are common even in widely-adopted CPUs~\cite{solt2022rememberr}, can cause unsoundness under this assumption.
+% In this paper, we demonstrate that indeed functional correctness bugs can cause unsoundness for techniques that formulate this assumption.
+% Further, we identify that only a well-defined class of functional correctness bugs can lead to such unsoundness.
+% (b) The \emph{Architectural Flow Matching Assumption}: information flows on architectural paths shall coincide with architectural transactions.
+% In this paper, we show that microarchitectural transactions that are not architectural, such as microarchitecturally reading architectural values during transient execution, can cause unsoundness for techniques that formulate this assumption.
+% (c) The \emph{Input Constraint Assumption}: some input data words shall be constrained to a restricted set of potential values interpreted as safe instruction encodings.
+% In this paper, we show that an increase in the diversity of input words, such as the cohabitation of data and instructions on a memory bus, is typical when the CPU is integrated into a larger system, and can cause unsoundness for techniques that formulate this assumption.
+% Taken individually, each of these three assumptions is generally violated in typical CPU implementations.
+
+% \para{Inconstant}
+% Intuitively, each verification technique has its own strengths and weaknesses.
+% For example, the contract shadow logic technique~\cite{tan2025contractshadowlogic} relies on the correctness assumption, while \ucfi has been demonstrated to have practical functional correctness bug detection capabilities~\cite{ceesay2024mucfi}, hence one might expect complementarity between these two techniques.
+% Unfortunately, we show that not only does each verification technique have its own assumption-related blind spots, but even if we combine all automatic state-of-the-art verification techniques~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic}, common blind spots remain that cannot be detected, which fundamentally undermines the typical comprehensiveness expectations that verification engineers have when using formal techniques.
+% % To demonstrate the existence of common blind spots, we construct \cpuname, a RISC-V CPU implementation based on the 2-stage Sodor implementation~\cite{sodor}.
+% % \ourname contains an information leakage vulnerability that we craft by leveraging our classification and analysis of the assumptions made by the state-of-the-art verification techniques, and we demonstrate the existence of a timing side-channel in \ourname that is undetectable by all the existing automatic constant-time verification techniques combined.
+% We formulate a set of guidelines to help researchers and practitioners reason about constant-time verification techniques.
+% % \textbf{(I'm not yet sure what the guidelines will be but it would be a nice-to-have)}
+% % }
+
+% \ourname is available at \url{https://comsec.ethz.ch/hybridift/}

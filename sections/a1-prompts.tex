@@ -1,0 +1,85 @@
+Listing~\ref{lst:system-prompt-template} introduces the global prompt template.
+
+\begin{lstlisting}[language=python,caption={Global prompt template},label={lst:system-prompt-template},breaklines=true]
+"""You are an expert SystemVerilog designer. Your task is to generate a single SystemVerilog file containing MULTIPLE, executable SystemVerilog modules.
+The goal is to create diverse snippets, each targeting as many lines as possible in the file ('{target_cpp_filename}'). You will be shown the content of this C++ file. The overall goal is to maximise the coverage of the cpp file.
+CRITICAL REQUIREMENTS FOR EACH MODULE:
+1.  Each module MUST have at least one input port (you can choose width/type) and at least one output port (you can choose width/type).
+2. All class instanciations, must be done in a procedural blocks.
+3. Each module of the file must be executable within the context of the file.
+The generated SystemVerilog code MUST be syntactically correct and will be verified by Verilator.
+Do NOT include:
+- Any module named 'top'
+- Simulation stimulus (like `initial` blocks driving signals over time or containing delays).
+- Timing delays (`#`).
+- Simulation control tasks (`$finish`, `$stop`, etc.).
+- Display or monitoring tasks (`$display`, `$monitor`, `$write`, etc.).
+- Module instantiations (unless the C++ file specifically handles hierarchy).
+- Any comments or code that are not relevant to the SystemVerilog constructs.
+The generated code should be self-contained and not rely on any external files or modules.
+Provide only the complete SystemVerilog code containing all the generated modules in a single code block. Do not include explanations or markdown formatting."""
+\end{lstlisting}
+
+Listing~\ref{lst:initial-prompt-template} introduces the initial prompt template for each conversation.
+
+\begin{lstlisting}[language=python,caption={initial prompt template},label={lst:initial-prompt-template},breaklines=true]
+"""FIRST identify all the different SystemVerilog features this file is supposed to handle or simulate. THEN Once you identified all the features, that are specific to this file then generate a single SystemVerilog file containing MULTIPLE, modules.
+Each module should target as many lines as possible from the Verilator C++ file '{target_cpp_filename}' (content provided below).
+Analyze the C++ code to understand the Verilog constructs it handles. Generate complex but valid SystemVerilog snippets using these constructs, maximising the coverage of the C++ file.
+CRITICAL REQUIREMENTS FOR EACH MODULE:
+1.  Each module MUST have at least one input and one output.
+2.  Each module must be executable within the file context.
+3.  If you have no idea how to correct the error, delete the line that is problematic.
+4.  Each module must have code to maximise the coverage of the C++ file.
+Include as many DIFFERENT modules as possible, each focusing on a different feature this C++ file is supposed to handle.
+Maximise the coverage of the C++ file.
+Ensure the SystemVerilog code is self-contained (minimal/no instantiations) and syntactically correct.
+Avoid simulation-specific constructs (initial blocks for stimulus, delays, $finish, $display).
+
+The objective is MAXIMIZING the coverage of the C++ file.
+
+Content of target C++ file '{target_cpp_filename}':
+```cpp
+{target_cpp_content}
+```
+
+Coverage of this file is '{coverage_excerpt}'.
+
+As you can see it is quite low, and you must improve it by all means.
+
+Create at least a module for each different function present in the file.
+
+Generate only the SystemVerilog code containing all modules for this single file."""
+\end{lstlisting}
+
+Listing~\ref{lst:feedback-prompt-template} introduces the feedback prompt template, which is used in the feedback loop.
+
+\begin{lstlisting}[language=python,caption={Feedback prompt template},label={lst:feedback-prompt-template},breaklines=true]
+"""The following SystemVerilog code was generated to maximise coverage of the Verilator C++ file '{target_cpp_filename}', but it failed linting (`verilator --lint-only -Wall --no-timing`). The goal was to generate MULTIPLE modules, each targeting a specific construct, each module having an input and an output port.
+
+Target C++ file content ('{target_cpp_filename}'):
+```cpp
+{target_cpp_content}
+```
+
+Coverage of this file is '{coverage_excerpt}'.
+
+Faulty generated SystemVerilog code:
+```systemverilog
+{generated_v_code}
+```
+
+Verilator Lint Error Output (Stderr focused):
+```text
+{error_summary}
+```
+
+Please analyze the faulty SystemVerilog code, and the lint errors. Provide a corrected version of the SystemVerilog code that fixes the lint error(s) while adhering strictly to ALL the requirements:
+1.  Each module targets a specific construct relevant to the C++ file, try not to simplify too much the code.
+2.  EACH module MUST have at least one input and one output.
+3.  Maximize the coverage of the C++ file.
+4.  No comments
+5.  FIX ALL THE ERRORS (try avoiding deleting the lines unless you have absolutely no idea how to fix the error).
+Ensure the code remains self-contained within the single file and avoids simulation-specific constructs or timing delays.
+Generate only the corrected SystemVerilog code containing all modules."""
+\end{lstlisting}

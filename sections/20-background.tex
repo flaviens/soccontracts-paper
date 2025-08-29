@@ -1,0 +1,112 @@
+We provide background on SystemVerilog, EDA software and translation bugs, fuzzing, and LLM-based code generation.
+
+\subsection{SystemVerilog}
+\label{sec:background:verilog}
+
+\begin{lstlisting}[caption={Example of a non-deterministic module.},label={lst:non-deterministic-module},language=verilog]
+module example_non_deterministic_module (
+    input logic clk_i,
+    input logic a_i,
+    input logic b_i,
+    output logic y_o
+); 
+  always @(posedge clk) y_o = a_i;
+  always @(posedge clk) y_o = b_i;
+endmodule
+\end{lstlisting}
+
+SystemVerilog~\cite{ieee1800-2023} is the de facto standard input language for EDA software.
+This language can represent both hardware designs at the Register Transfer Level (RTL) and testbenches, which are used to verify them.
+It models hardware designs as a hierarchy of modules, which can encapsulate combinational and stateful logic, including variables, functions, and tasks.
+Wires in SystemVerilog take four values: \texttt{0}, \texttt{1}, \texttt{X} (unknown), and \texttt{Z} (high-impedance).
+\texttt{X} represents an unknown value, for example when a register is uninitialized.
+\texttt{Z} represents a high impedance state, i.e., an undriven wire.
+SystemVerilog enforces a partial ordering of events during simulation.
+This reflects realistic hardware behavior and often results in non-deterministic outcomes.
+For example, Listing~\ref{lst:non-deterministic-module} illustrates a non-deterministic module: SystemVerilog does not define the order in which the two \texttt{always} blocks are executed as they are driven by the same signal.
+
+There are usually many ways to express the same hardware design in SystemVerilog.
+At a high level, \emph{behavioral} SystemVerilog describes the design in terms of its functionality
+(i.e., what the circuit should do) by using procedural constructs such as \texttt{always}, \texttt{case} and \texttt{function},
+while \emph{structural} SystemVerilog describes the design in terms of its components and their interconnections,
+using constructs such as wires and logic gates.
+It is common to mix both styles in a single design, for example by using behavioral constructs to describe relatively complex algorithms and control, while using structural constructs to describe the module hierarchy.
+
+\subsection{EDA Software \& Translation Bugs}
+\label{sec:background:eda-software}
+
+\begin{figure}[t]
+    \begin{center}
+        \includegraphics[width=0.9\columnwidth]{figures/mirtl/mirtl.pdf}
+    \end{center}
+    \vspace*{-1em}
+    \caption{\label{fig:background_mirtl} Left: mistranslation gadget. Right: malicious use of a mistranslation gadget to bypass a permission check.}
+    \vspace*{-1.4em}
+\end{figure}
+
+EDA software fulfills several roles in the hardware design flow.
+We focus on simulation and synthesis.
+RTL simulators take as input an RTL hardware design and a testbench, both typically written in SystemVerilog.
+They produce an output, such as a binary, C++ code, or an intermediate representation, that can be executed to verify the design.
+The resulting simulations generate outputs such as waveforms, logs, or the results of SystemVerilog assertions.
+Examples of open-source RTL simulators include Verilator~\cite{Snyder2024Verilator}, Icarus Verilog~\cite{icarus-verilog}, and CXXRTL~\cite{cxxrtl}.
+Synthesizers take as input an RTL hardware design, typically written in SystemVerilog, and produce a low-level netlist, which can then be used to fabricate the hardware on an ASIC or on an FPGA.
+Yosys~\cite{wolf2013yosys} is the de facto standard open-source RTL synthesizer.
+
+\para{Translation bugs}
+Translation bugs~\cite{mirtl} are functional errors in EDA software that cause its internal representation of a hardware design to differ from the intended design.
+Because of a translation bug, an RTL simulator may simulate a hardware design that is slightly different from the original design.
+An RTL synthesizer may synthesize a netlist that does not match the functionality of the original design.
+These translation bugs typically arise from errors in SystemVerilog parsing or in optimization passes~\cite{vloghammer,verismith,mirtl}.
+% 
+Figure~\ref{fig:background_mirtl} (left) illustrates a mistranslation gadget~\cite{mirtl}, which is a construct that should produce a value of \texttt{0} according to the specification, but that is misinterpreted by the EDA software into a construct that produces a constant value of \texttt{1}.
+Figure~\ref{fig:background_mirtl} (right) illustrates how a mistranslation gadget can be used to bypass a permission check in a hardware design, under a threat model where a malicious third-party provides an IP that has some permission checking functionality.
+Although the IP behaves correctly during testing and verification, it may behave differently once fabricated.
+
+\subsection{Fuzzing}
+\label{sec:background:fuzzing}
+
+Fuzzing is a technique that consists of generating random inputs to a program and checking whether it executes correctly.
+Traditionally, fuzzing has been used to find crashes in software programs that could potentially form security vulnerabilities~\cite{afl,GodefroidLM08,
+    GodefroidLM12,
+    StephensGSVWKV16,
+    RawatJKGB17,
+    ChenC18,
+    fioraldi2020aflpp,
+    LemieuxS18,
+    WangCCLW19,
+    pham2019smart,
+    chen2019enfuzz,
+    bohme2017directed,
+    natella2022stateafl,
+    canakci2022targetfuzz,
+    wang2024progress}.
+Differential fuzzing~\cite{hur2021difuzzrtl,Wachter2025DUMPLING,Yang2011Csmith} extends this idea to compare the outputs of two different programs, which can be used to detect bugs beyond crashes and in the absence of a golden model.
+Differential fuzzing has been used to detect translation bugs~\cite{vloghammer,verismith,mirtl}.
+One important aspect of differential fuzzing is determinism: if the compared programs can legitimately produce different outputs for the same input, a mismatch does not necessarily indicate a bug.
+Listing~\ref{lst:non-deterministic-module} shows such an example of code that can produce different valid outputs for the same input.
+
+%\begin{lstlisting}[caption={Example of non deterministic code},label={lst:non-determ},language=verilog]
+%module non_deterministic(
+%    input logic a,
+%    input logic b,
+%    output logic c
+%); 
+%    c <= a;
+%    c <= b;
+%endmodule
+%\end{lstlisting}
+
+\subsection{LLM-based code generation}
+\label{sec:background:llm-code-generation}
+
+Using LLMs in fuzzing is increasingly popular~\cite{10731701,assertllm,hdleval,llmproto,verilogreader} as it enables writing language-agnostic fuzzers~\cite{jiang2024llmfuzz,ossfuzzgen}
+and generating diverse test cases without having to write a procedural code generator for each target language.
+Their use has proven effective in uncovering new bugs in popular projects~\cite{ossfuzzgen}.
+Nevertheless, the quality and diversity of SystemVerilog code generated by LLMs are limited~\cite{hdl2v}.
+% The second drawback of LLM based fuzzing is that there are no guarantees on generating valid code.
+Furthermore, generating a new test case with an LLM is orders of magnitude slower and more expensive than traditional methods.
+
+\para{Discussion}
+Existing translation bug detection techniques rely on generating simple SystemVerilog constructs, ignoring the syntactic complexity of the language.
+LLMs may help increase syntactic diversity, but as we will show, leveraging them for this purpose introduces new challenges.
