@@ -1,0 +1,49 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
+  <diagram name="Page-1" id="LfKBX9hCH3cwpcq0Zu3K">
+    <mxGraphModel dx="359" dy="271" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-12" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="29" width="230" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-1" value="CPU" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="69" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-2" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;startWidth=2.8846153846153846;startSize=1.8403846153846153;endWidth=2.8846153846153846;endSize=2.054054054054054;width=3.6216216216216215;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="ZmFX0GMgsWfCw7Ng0MPQ-1" target="ZmFX0GMgsWfCw7Ng0MPQ-9">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="70" y="159" as="sourcePoint" />
+            <mxPoint x="180" y="84" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-4" value="Bus (e.g. AMBA, TileLink)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="85" y="86" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-7" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;startWidth=2.8846153846153846;startSize=1.8403846153846153;endWidth=2.8846153846153846;endSize=1.972972972972973;width=3.2972972972972974;" edge="1" parent="1">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="114.88" y="81" as="sourcePoint" />
+            <mxPoint x="114.88" y="61" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-8" value="Peripherals" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-9" value="Memory" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="68" width="50" height="21" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-10" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;startWidth=2.8846153846153846;startSize=1.8403846153846153;endWidth=2.8846153846153846;endSize=1.972972972972973;width=3.2972972972972974;" edge="1" parent="1">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="194.88" y="81" as="sourcePoint" />
+            <mxPoint x="194.88" y="61" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-11" value="Accelerators" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="40" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ZmFX0GMgsWfCw7Ng0MPQ-13" value="SoC / platform" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="35" y="6" width="115" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
