@@ -45,51 +45,63 @@ Multiple hardware optimizations, such as caches and branch predictors, learn and
 In particular, the execution time of later instructions may depend on the outcome of earlier instructions.
 For example, accessing a cache line might be faster if the line has been brought into the cache recently by a prior memory access to a nearby location.
 Timing side channels can result from such optimizations when the timing of a program's execution depends on secret data.
-Constant-time programming techniques, such as not using secret data as array indices, aim to ensure that secrets do not influence the execution time of a program through such channels~\cite{}.
-
+Constant-time programming techniques, such as not using secret data as array indices, aim to ensure that secrets do not influence the execution time of a program through such channels~\cite{OsvikShamirTromer2006CacheAES,AlmeidaEtAl2016CTVerif}.
 
 \subsection{Hardware-software contracts}
 \label{subsec:hw-sw-contracts}
 
-{\color{cyan}{
-    To understand information propagation and split responsibilities between hardware and software, past work has formalized the sequence of observable events produced by a CPU when executing a given program as a function of the initial microarchitectural state, the program and the data in memory.
-    This observation sequence is referred to as a hardware trace~\cite{oleksenko2022revizor}.
-    Possible hardware traces are specified as a contract~\cite{guarnieri2021hardware}, which stipulates an execution mode and an observation mode.
-    The \emph{execution mode} determines which instructions will be executed and cause observable events, in addition to the instructions architecturally present in the executed program.
-    The \emph{observation mode} determines the events that are exposed to the observer by (potentially transiently) executed instructions when executing the program, for example, disclosing addresses or values that correspond to memory accesses.
+% {\color{cyan}{
 
-    Non-interference properties express that the observable behavior of a CPU is independent of the secret data processed by the CPU, and hence these properties include the notion of secret information. 
-    Formally, a CPU implementation satisfies a non-interference property if for all programs $P$ (in this paper, programs include public memory valuations $M_p$ in addition to the instructions) and for all pairs of secret valuations $M_s$ and $M'_s$, Equation~\ref{eq:isatrace} implies Equation~\ref{eq:microtrace}, i.e., if the ISA observations for the pairs $(P, M_s)$ and $(P, M'_s)$ are identical, then the microarchitectural observations for the pairs $(P, M_s)$ and $(P, M'_s)$ are also identical.
-    For example, this can stipulate that if a program is written in some constant-time form with respect to secret data (Equation~\ref{eq:isatrace}), then when the CPU executes this program, the instruction commit timing will not reveal secret information (Equation~\ref{eq:microtrace}).
-}
+Hardware-software contracts~\cite{guarnieri2021hardware} split confidentiality responsibilities between the CPU and the software that it executes.
+For a given program, an initial microarchitectural state, and the contents of memory, the contract fixes an execution mode and an observation mode.
+The \emph{execution mode} determines which instructions (beyond those architecturally present) may be executed and generate events.
+The \emph{observation mode} determines which of those events are exposed to an observer (possibly transiently), such as the addresses or values involved in memory accesses. Under these two choices, the CPU's behavior is summarized as a sequence of observable events known as a hardware trace~\cite{guarnieri2021hardware,oleksenko2022revizor}.
+
+\subsection{Hardware-software contract verification}
+\label{subsec:hw-sw-contracts-verification}
+
+% {\color{cyan}{
+
+Multiple independent verification efforts have been conducted to ensure that hardware-software contracts are upheld during program execution, in particular regarding constant-time behavior~\cite{dinesh2024conjunct,ceesay2024mucfi,guarnieri2021hardware,tan2025contractshadowlogic,dinesh2025h,hsiao2024rtl2mmupath,wang2023specification}.
+Most techniques consider a fixed contract~\cite{dinesh2024conjunct,ceesay2024mucfi,tan2025contractshadowlogic,dinesh2025h}.
+Others leverage custom, non-trivial insights and techniques to verify specific contracts~\cite{hsiao2024rtl2mmupath,wang2023specification}.
+
+\para{Discussion}
+In this paper, we will introduce \pics, a novel abstraction for reasoning about platform-induced timing side-channels, and hence about different hardware-software contracts.
+We will introduce a synthesizable instrumentation generic across verification techniques.
+
+% To understand information propagation and split responsibilities between hardware and software, past work has formalized the sequence of observable events produced by a CPU when executing a given program as a function of the initial microarchitectural state, the program and the data in memory.
+% This observation sequence is referred to as a hardware trace~\cite{oleksenko2022revizor}.
+% Possible hardware traces are specified as a contract~\cite{guarnieri2021hardware}, which stipulates an execution mode and an observation mode.
+% The \emph{execution mode} determines which instructions will be executed and cause observable events, in addition to the instructions architecturally present in the executed program.
+% The \emph{observation mode} determines the events that are exposed to the observer by (potentially transiently) executed instructions when executing the program, for example, disclosing addresses or values that correspond to memory accesses.
+% }
 
 
 % \fls{Maybe add some more detail}
 % \fls{R3. There is a significant amount of jargon related to security and side-channel attacks that is likely not familiar to the average ICCAD attendee, and is not really adequately introduced or explained.}
 
-\begin{equation}
-\vspace*{-.3em}
-\label{eq:isatrace}
-% \text{ISA}(P, M_p, M_s) = \text{ISA}(P, M_p, M'_s)
-\text{ISA}(P, M_s) = \text{ISA}(P, M'_s)
-\end{equation}
-\begin{equation}
-\label{eq:microtrace}
-% \text{Micro}(P, M_p, M_s) = \text{Micro}(P, M_p, M'_s)
-\text{Micro}(P, M_s) = \text{Micro}(P, M'_s)
-\end{equation}
+% \begin{equation}
+% \vspace*{-.3em}
+% \label{eq:isatrace}
+% % \text{ISA}(P, M_p, M_s) = \text{ISA}(P, M_p, M'_s)
+% \text{ISA}(P, M_s) = \text{ISA}(P, M'_s)
+% \end{equation}
+% \begin{equation}
+% \label{eq:microtrace}
+% % \text{Micro}(P, M_p, M_s) = \text{Micro}(P, M_p, M'_s)
+% \text{Micro}(P, M_s) = \text{Micro}(P, M'_s)
+% \end{equation}
 
-\para{Discussion}
-Verifying non-interference properties raises challenges not only in terms of properly mapping the property to the design under verification, but also in terms of completeness and performance.
-Existing work has proposed various approaches to address these challenges, including decisions on the observation mode and specific assumptions that accelerate the verification process.
-}
+% \para{Discussion}
+% Verifying non-interference properties raises challenges not only in terms of properly mapping the property to the design under verification, but also in terms of completeness and performance.
+% Existing work has proposed various approaches to address these challenges, including decisions on the observation mode and specific assumptions that accelerate the verification process.
+% }
 
 
 % In the rest of this paper, we consider $M_p$ as part of the program $P$.
 % Intuitively, non-interference properties express that an observer cannot infer more information about the input of a program execution on a given CPU than what is allowed in a given contract.
 
-
-% \textcolor{orange}{TODO: It would be good to finish with a question.}
 
 % \subsection{Non-interference Properties}
 % \label{subsec:non-interference}
