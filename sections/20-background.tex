@@ -52,16 +52,18 @@ Constant-time programming techniques, such as not using secret data as array ind
 
 % {\color{cyan}{
 
+\para{Contract definition}
 Hardware-software contracts~\cite{guarnieri2021hardware} split confidentiality responsibilities between the CPU and the software that it executes.
 For a given program, an initial microarchitectural state, and the contents of memory, the contract fixes an execution mode and an observation mode.
 The \emph{execution mode} determines which instructions (beyond those architecturally present) may be executed and generate events.
 The \emph{observation mode} determines which of those events are exposed to an observer (possibly transiently), such as the addresses or values involved in memory accesses. Under these two choices, the CPU's behavior is summarized as a sequence of observable events known as a hardware trace~\cite{guarnieri2021hardware,oleksenko2022revizor}.
 
-\subsection{Hardware-software contract verification}
-\label{subsec:hw-sw-contracts-verification}
+% \subsection{Hardware-software contract verification}
+% \label{subsec:hw-sw-contracts-verification}
 
 % {\color{cyan}{
 
+\para{Contract verification}
 Multiple independent verification efforts have been conducted to ensure that hardware-software contracts are upheld during program execution, in particular regarding constant-time behavior~\cite{dinesh2024conjunct,ceesay2024mucfi,guarnieri2021hardware,tan2025contractshadowlogic,dinesh2025h,hsiao2024rtl2mmupath,wang2023specification}.
 Most techniques consider a fixed contract~\cite{dinesh2024conjunct,ceesay2024mucfi,tan2025contractshadowlogic,dinesh2025h}.
 Others leverage custom, non-trivial insights and techniques to verify specific contracts~\cite{hsiao2024rtl2mmupath,wang2023specification}.

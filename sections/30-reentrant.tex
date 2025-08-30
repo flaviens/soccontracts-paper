@@ -1,8 +1,47 @@
-We use the notions of platform and system interchangeably.
-We root our platform integration analysis on hardware-software contracts~\cite{guarnieri2021hardware}.
-We discuss the relevant scope of observation and execution modes for constant-time verification techniques.
-In the light of this discussion, we assess the impact of the spatial scope of the verification and the definition of sinks on the soundness of the verification.
-We then formulate \pics that allow to verify constant-time properties in a platform integration context and propose a lightweight CPU instrumentation that augments a CPU with a synthesizable summary of all the potential reentrant information flows from the platform that integrates the CPU.
+\subsection{Motivational example}
+
+\begin{figure}[t]
+    \begin{center}
+    \includegraphics[width=0.8\columnwidth]{figures/verifscopecache/verifscopecache.pdf}
+    \end{center}
+    \vspace*{-1em}
+    \caption{\label{fig:verifscopecache}
+        Example verification scopes, represented as dotted boxes. (a -- cache excluded) the cache is considered part of the platform. (b -- cache included) the cache is considered part of the CPU core.
+    }
+    \vspace*{-1em}
+\end{figure}
+
+
+\para{Methodology -- cache excluded}
+Figure~\ref{fig:verifscopecache} (a) illustrates a small system in which a CPU is integrated in a platform that includes a cache and memory.
+We instantiate this system, using the Kronos CPU as a case study, and a direct-mapped cache.
+We use the state-of-the-art VeloCT~\cite{dinesh2025h} tool to perform constant-time verification of the CPU, as indicated by the dotted box.
+We consider memory instructions as part of the safe instruction set that should execute in constant-time.
+
+\para{Results -- cache excluded}
+The Kronos verification with VeloCT, which indicates that in isolation, the CPU is constant-time secure.
+In particular, this means that software can safely use secret information as addresses of memory instructions.
+
+\para{Methodology -- cache included}
+Figure~\ref{fig:verifscopecache} (b) illustrates a scenario similar to (a), but with the cache included in the verification scope, i.e., considered part of the CPU under verification.
+Except for this point, we use the same methodology as in the previous cache excluded case.
+
+\para{Results -- cache included}
+The Kronos verification with VeloCT, which indicates that this time, the CPU is not constant-time secure.
+In particular, this means that the program execution timing can depend on secret information used as addresses of memory instructions.
+
+\para{Take-aways}
+The results underline that while constant-time verification techniques typically operate at the level of a CPU in isolation (the platform's RTL might not yet be finalized at the CPU verification time), they may not account for all the potential interactions with other components in the system, such as caches or memory.
+This means that the integration of the CPU into a larger system can introduce new timing channels that were not present in isolation.
+
+\subsection{Reentrant flows}
+
+
+% We use the notions of platform and system interchangeably.
+% We root our platform integration analysis on hardware-software contracts~\cite{guarnieri2021hardware}.
+% We discuss the relevant scope of observation and execution modes for constant-time verification techniques.
+% In the light of this discussion, we assess the impact of the spatial scope of the verification and the definition of sinks on the soundness of the verification.
+% We then formulate \pics that allow to verify constant-time properties in a platform integration context and propose a lightweight CPU instrumentation that augments a CPU with a synthesizable summary of all the potential reentrant information flows from the platform that integrates the CPU.
 
 % \para{Threat model}
 % % \fls{Discuss this}
