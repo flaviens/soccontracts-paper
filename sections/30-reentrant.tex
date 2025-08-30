@@ -36,6 +36,30 @@ This means that the integration of the CPU into a larger system can introduce ne
 
 \subsection{Reentrant flows}
 
+\para{Netlist graphs}
+Let us describe the system, for example, the one illustrated in Figure~\ref{fig:verifscopecache}, as a netlist $G = (V, E)$, where $V$ is the set of vertices representing logic gates such as AND, OR, NOT, flip-flops, adders, and $E$ is the set of directed wires between these vertices.
+We denote the subgraph of $G$ that corresponds to the CPU as $G_C = (V_C, E_C)$, where $V_C \subseteq V$ and $E_C \subseteq E$.
+In particular, for all edges $(u, v) \in E_C$, both $u$ and $v$ are vertices in $V_C$.
+We denote the complementary subgraph as $G_{P} = (V_{P}, E_{P})$, where $V_{P} = V \setminus V_C$ and $E_{P} = E \setminus E_C$.
+
+\para{Constant-time programs \& secret data}
+For a given constant-time verification technique, let us denote by $\mathcal{P}$ the set of constant-time programs that are considered for verification.
+The elements of the set $\mathcal{P}$ are triples $\tau = (P, M_p, M_s)$, where $P$ is a constant-time program, $M_p$ is the set of public memory valuations, and $M_s$ is the set of secret values that the program may depend on.
+Specifically, this set $\mathcal{P}$ depends on the specific constant-time verification technique being used.
+For example, for ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h}, a program $P$ is considered constant-time if it contains no unsafe memory instructions (independently of how secret data is used).
+For Tan et al.~\cite{tan2025contractshadowlogic}, a program $P$ is considered constant-time if it ensures that the program's control flow and all memory accesses are independent of secret data.
+
+\para{Secret propagation}
+Constant-time verification techniques typically analyze whether the valuation of a state element can be influenced by secret information.
+For example, Tan et al.~\cite{tan2025contractshadowlogic}, LeaVe~\cite{wang2023specification}, ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h} monitor whether secret information can influence the commit signal, while \ucfi~\cite{ceesay2024mucfi} monitors whether secret information can influence a microarchitectural program counter structure.
+
+We denote by $V^s$ the set of vertices in $V$ whose valuation can be influenced by secret information when the system executes a program written in constant-time with respect to the secret data.
+\textcolor{red}{TODO Define an execution.}
+That is, an element $v \in V$ belongs to $V^s$ if and only if there exists a tuple $(P, M_p, M_s, M_s')$ such that $(P, M_p, M_s) \in \mathcal{P}$ and $(P, M_p, M_s') \in \mathcal{P}$.
+
+% \begin{equation}
+%     V^s = \{ v \in V \mid \exists (P, M_p, M_s, M_s') \mid (P, M_p, M_s) \in \mathcal{P} \land (P, M_p, M_s') \in \mathcal{P} \land 
+% \end{equation}
 
 % We use the notions of platform and system interchangeably.
 % We root our platform integration analysis on hardware-software contracts~\cite{guarnieri2021hardware}.
