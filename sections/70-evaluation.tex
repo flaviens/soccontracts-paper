@@ -2,8 +2,8 @@ In this section, we first present the \PICI implementation and evaluate its perf
 For comprehensiveness, we then also  verify that not only the CPU, but also the rest of the platform complies with its own contract terms, i.e., that a platform will not propagate more taint than what the contract stipulates~(Section~\ref{subsec:pici_platform}).
 
 \para{Evaluation setup}
-We executed the performance evaluations on a server equipped with an Intel Xeon E5-2667 CPU with 256\,GB RAM.
-\textcolor{red}{TODO Say something about sodor.}
+We execute the performance evaluations on a server equipped with an Intel Xeon E5-2667 CPU with 256\,GB RAM.
+We use the 2-stage Sodor RISC-V CPU~\cite{sodor}, which is a simple CPU commonly used in constant-time verification benchmarks~\cite{wang2023specification,tan2025contractshadowlogic}.
 
 % \para{The problem with a CPU in isolation}
 % We now show that techniques can be unsound because the SoC integration is not considered.

@@ -16,8 +16,8 @@ This is achieved using \texttt{XOR} operations between the CPU outputs of the tw
 Ultimately, another \texttt{XOR} operation with the result of this difference is performed with the input, deciding whether for a given input, the two copies of the CPU will receive the same input, or one copy will receive a flipped input.
 Note that there is no conceptual difference between the \PICI for a miter construct and the \PICI for a dynamic information flow tracking instrumentation, yet the latter benefits from the abstraction built into the dynamic information flow tracking instrumentation, which allows for a more compact and arguably more intuitive \PICI.
 
-\para{Take-away}
-In Section~\ref{sec:eval}, we will show that when instrumented with the \PICI, the techniques that were originally unable to detect basic timing side-channels due to the verification scope not including caches are now able to detect them.
-Importantly, this requires no change to the verification technique implementation at all, as the \PICI becomes part of the design under verification's taint tracking logic or miter construct from the verification tool's perspective.
-In terms of performance, we will also show that adding the \PICI incurs a negligible overhead.
-However, while the \PICI addresses a necessary condition for maintaining soundness when the CPU under verification is integrated in a system, existing automated constant-time verification tools have other critical shortcomings that affect unsoundness besides platform integration, as we show next in Section~\ref{sec:techniques}.
+% \para{Take-away}
+% In Section~\ref{sec:eval}, we will show that when instrumented with the \PICI, the techniques that were originally unable to detect basic timing side-channels due to the verification scope not including caches are now able to detect them.
+% Importantly, this requires no change to the verification technique implementation at all, as the \PICI becomes part of the design under verification's taint tracking logic or miter construct from the verification tool's perspective.
+% In terms of performance, we will also show that adding the \PICI incurs a negligible overhead.
+% However, while the \PICI addresses a necessary condition for maintaining soundness when the CPU under verification is integrated in a system, existing automated constant-time verification tools have other critical shortcomings that affect unsoundness besides platform integration, as we show next in Section~\ref{sec:techniques}.
