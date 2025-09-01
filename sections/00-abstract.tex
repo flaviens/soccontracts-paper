@@ -1,9 +1,12 @@
-The time that a computer requires to perform computations can breach confidentiality.
+Variations in the time a computer requires to perform computations can leak confidential information.
 Constant-time programming techniques defend against such timing attacks, but make assumptions on the behavior of the underlying hardware.
 As a response, previous work has introduced several techniques for verifying CPU compliance with hardware-software contracts.
 %
-However, selecting which hardware-software contract to verify is non-trivial and requires careful consideration of the system's architecture and the specific timing attacks it may face: if a CPU is integrated into a platform that is subject to more timing channels than specified in the contract that the CPU expects, the verification may not be sufficient to guarantee security.
-In this paper, we address the integration of a verified constant-time CPU into a larger system by introducing \pics.
-\pics are a novel approach to specifying an upper bound of the timing channels that might appear in a the platform that integrates a CPU.
-We introduce a lightweight instrumentation that allows for the dynamic monitoring of platform-induced timing channels and that is by construction compatible with all CPU constant-time verification techniques.
-Based on this instrumentation, we show that several techniques, while effective in isolation, fail to provide security guarantees when the CPU is integrated into a larger system.
+However, selecting which hardware-software contract to verify is non-trivial and requires careful consideration of the system's architecture and the specific timing attacks it may face.
+If a CPU is integrated into a platform with more timing channels than its expected contract specifies, CPU verification alone may be insufficient to guarantee security.
+In this paper, we address the integration of a verified constant-time CPU into a larger system.
+We make three contributions: (1) we define \pics as a formal way to capture an upper bound of the platform-induced timing channels, (2) we design a low-overhead instrumentation for dynamic monitoring that is compatible with all existing CPU verification methods, and (3) we demonstrate that existing techniques fail under integration, whereas \pics enable stronger, system-wide security guarantees against timing attacks.
+
+% We introduce platform timing contracts, a novel abstraction that specifies an upper bound on timing channels introduced by platform integration.
+% We introduce a lightweight instrumentation that allows for the dynamic monitoring of platform-induced timing channels and that is inherently compatible with all CPU constant-time verification techniques.
+% Based on this instrumentation, we show that several techniques, while effective in isolation, fail to provide security guarantees when the CPU is integrated into a larger system.
