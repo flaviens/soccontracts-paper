@@ -25,8 +25,9 @@ By considering these interactions, platform timing contracts can provide a more 
 To verify the compliance of a CPU integrated into a specific platform using existing techniques that verify a CPU in isolation, we introduce an automatic instrumentation that captures the relevant platform-specific timing information while retaining compatibility with all existing hardware-software contract verification techniques.
 
 We establish the platform timing contracts for four different platforms.
-We apply the instrumentation corresponding to each platform to the four RISC-V CPUs: \textcolor{red}{TODO List them}.
-Not only does the verification time increase by not more than ~\textcolor{red}{5}\%, but we demonstrate the existence of platform-specific timing channels on typical platforms, that would otherwise be missed.
+We apply the instrumentation corresponding to each platform to the RISC-V Sodor CPU.
+Not only does the verification time not increase significantly when applying the instrumentation if no violation is found, but we demonstrate the existence of platform-specific timing channels on typical platforms, that would otherwise be missed.
+\fls{TODO report the results for no violation found.}
 
 In summary, our contributions in this paper are:
 \begin{itemize}
