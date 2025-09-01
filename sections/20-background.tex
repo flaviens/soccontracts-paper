@@ -24,7 +24,7 @@ In this section, we provide background on SoC platforms, timing side-channels an
 
 \begin{figure}[t]
     \begin{center}
-    \includegraphics[width=1\columnwidth]{figures/exampleplatform/exampleplatform.pdf}
+    \includegraphics[width=0.8\columnwidth]{figures/exampleplatform/exampleplatform.pdf}
     \end{center}
     \vspace*{-1em}
     \caption{\label{fig:exampleplatform}
@@ -39,6 +39,8 @@ The communication between these components is typically managed through standard
 Note that the bounds of components are not always clear-cut.
 For example, caches can be considered part of the CPU or of the platform.
 
+\textcolor{red}{TODO We need an IFT background section.}
+
 \subsection{Timing side-channels}
 
 Multiple hardware optimizations, such as caches and branch predictors, learn and exploit patterns in program execution to improve performance.
@@ -46,6 +48,33 @@ In particular, the execution time of later instructions may depend on the outcom
 For example, accessing a cache line might be faster if the line has been brought into the cache recently by a prior memory access to a nearby location.
 Timing side channels can result from such optimizations when the timing of a program's execution depends on secret data.
 Constant-time programming techniques, such as not using secret data as array indices, aim to ensure that secrets do not influence the execution time of a program through such channels~\cite{OsvikShamirTromer2006CacheAES,AlmeidaEtAl2016CTVerif}.
+
+\subsection{Information Flow Tracking}
+\label{subsec:ift}
+
+\begin{figure}[t]
+    \begin{center}
+    \includegraphics[width=0.5\columnwidth]{figures/glift/glift.pdf}
+    \end{center}
+    \vspace*{-1em}
+    \caption{\label{fig:glift} Taint tracking at gate level~\cite{tiwari2009complete}. Left: original circuit. Right: Added instrumentation for taint tracking. The original inputs are $a$ and $b$. The taint bits corresponding to $a$ and $b$ are respectively $a^t$ and $b^t$. The output taint bit $y^t$ indicates whether the output is tainted, i.e., influenced by the tainted inputs.}
+    \vspace*{-1em}
+\end{figure}
+
+\begin{figure}[t]
+    \begin{center}
+    \includegraphics[width=0.5\columnwidth]{figures/miter/miter.pdf}
+    \end{center}
+    \vspace*{-1em}
+    \caption{\label{fig:miter} Miter circuit. The two instances of the same design under test are supplied with the same secret data $s$ and unconstrained $p_1$ and $p_2$ public data. The output bit $y$ (i.e., instantiated for the instances in the miter as $y_1$ and $y_2$) reveals secret data if $x=1$ is satisfiable.}
+    \vspace*{-1em}
+\end{figure}
+
+Information flows capture properties such as confidentiality and integrity~\cite{hu2021hardware}.
+First, they can be measured by augmenting the hardware design under verification with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Figure~\ref{fig:glift}.
+Second, they can also be compared using a so-called miter circuit, comparing the outputs of two copies of the design under test, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Figure~\ref{fig:miter}.
+
+
 
 \subsection{Hardware-software contracts}
 \label{subsec:hw-sw-contracts}
