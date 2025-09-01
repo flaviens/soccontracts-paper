@@ -22,7 +22,7 @@ We use the 2-stage Sodor RISC-V CPU~\cite{sodor}, which is a simple CPU commonly
 The limited interface between the CPU and the platform makes the \PICIs simple, as earlier illustrated in Figure~\ref{fig:pic_instrum_taints} and Figure~\ref{fig:pic_instrum_miter}.
 We implement a Yosys synthesizer pass~\cite{wolf2013yosys} that instruments a CPU that is either instrumented with taint tracking logic such as GLIFT~\cite{tiwari2009complete} or CellIFT~\cite{solt2022cellift}, or part of a miter construct.
 The synthesizer pass takes as input a Verilog description of the CPU under test in one of these two configurations (instrumented for taint tracking or in a miter) and outputs a Verilog design instrumented with the \PICI.
-In addition to the CPU's Verilog description, the synthesizer pass takes a conditional contract as input, similar to the contracts presented in Section~\ref{sec:properties}, and takes a machine-readable description of the CPU's interface ports.
+In addition to the CPU's Verilog description, the synthesizer pass takes a conditional contract as input, similar to the contracts presented in Section~\ref{sec:reentrant}, and takes a machine-readable description of the CPU's interface ports.
 % The \PICI synthesizer pass is made of around 500 lines of C++ code.
 % \fls{TODO: Give an example contract in appendix and of the CPU interface ports file.}
 

@@ -1,24 +1,22 @@
 % !TeX root = ../main.tex
 % !TeX spellcheck = en_US
 
-\textcolor{red}{Should not only be about uarch. Should also be about archi leakage also?}
-Microarchitectural attacks are software-driven techniques that exploit behaviors below the ISA to encode and reveal secrets through measurable side effects, most commonly execution time.
-By carefully choreographing benign-looking instruction sequences, an attacker steers microarchitectural state, such as caches, TLBs, execution ports, branch predictors, DRAM buffers, to make secret-dependent effects externally observable.
+Timing side-channel attacks exploit variations in execution time to leak secrets through measurable side effects.
+By carefully choreographing benign-looking instruction sequences, an attacker can steer microarchitectural state, such as caches, TLBs, execution ports, branch predictors, or DRAM buffers, to make secret-dependent effects externally observable.
 Two broad families have emerged: transient/speculative-execution attacks~\cite{kocher2019spectre,lipp2018meltdown,canella2019fallout,schwarz2019zombieload,van2019ridl,van2021cacheout,ragab2021rage,wikner2022retbleed,trujillo2023inception,wikner2023phantom,wikner2024breaking,wikner2025bpi}, which leave secret-dependent footprints during mis-speculated execution, and contention-driven channels on shared resources~\cite{bernstein2005cache,Liu2015LLC,YaromFalkner2014FlushReload,Yarom2016CacheBleed,Moghimi2018MemJam,Gruss2016PrefetchSCA,Pessl2016DRAMA}, which measure or induce interference to encode information.
-These attacks pose a durable, cross-generation threat to modern processors, in particular because they can be mounted entirely in software, without special privileges or hardware access.
-Mitigation is notoriously difficult once silicon has shipped: the leakage channels are entwined with performance-critical design choices.
+These attacks are durable across processor generations because they can often be mounted entirely in software, without special privileges or hardware access.
+Mitigation is notoriously difficult after fabrication, since leakage channels are entangled with performance-critical design choices.
 Software or microcode defenses are often partial~\cite{ridlad} or impose significant overheads.
 
-To inform software developers about the potential side effects of their code on a given contract-compliant CPU, recent work has introduced hardware-software contracts~\cite{guarnieri2021hardware,oleksenko2022revizor}.
+To address these challenges, recent work introduced hardware-software contracts, which inform developers about the side effects of their code on a contract-compliant CPU~\cite{guarnieri2021hardware,oleksenko2022revizor}.
 As a result, several techniques have been proposed to formally verify that a CPU implementation complies with such contracts~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} to prevent confidentiality breaches before chip fabrication.
 
 \para{Platform timing channels}
-CPUs are often verified in isolation~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} before integration into a larger system, often for scalability reasons.
-Yet hardware-software contracts make assumptions on the system into which a CPU will be integrated.
-For example, the constant-time contract observer mode~\cite{guarnieri2021hardware} exposes the program counter of every executed instruction, and the addresses of all memory operations.
-This observation mode accounts for the timing effects of caches and other elements of the memory hierarchy~\cite{guarnieri2021hardware,oleksenko2022revizor}.
-Other contract observation modes exist, for example the architectural observer, which additionally discloses values exchanged with memory.
-These aspects of hardware-contracts are proper to the platform (i.e., the broader SoC) into which the CPU will be integrated, yet many verification techniques do not account for them or provide this flexibility.
+CPUs are often verified in isolation~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} before integration into a larger system, both for scalability and because at CPU design and verification time, the exact specifications of the integrating platforms are usually unknown during CPU design and verification.
+However, hardware-software contracts inherently assume a specific system context. When verification ignores this context, the results may not hold once the CPU is integrated into a platform.
+For example, the constant-time contract observer mode~\cite{guarnieri2021hardware} exposes the program counter and all memory-access addresses, capturing timing effects of caches and of the memory hierarchy~\cite{guarnieri2021hardware,oleksenko2022revizor}.
+Other modes, such as the architectural observer, reveal even more detail by also disclosing values exchanged with memory.
+Such observer modes depend on platform-level features (e.g., SoC components), yet many verification techniques overlook these modes or cannot flexibly capture platform-induced channels.
 
 \para{Platform timing contracts}
 Platform timing contracts extend the idea of hardware-software contracts to encompass the broader system context in which a CPU operates.
@@ -26,8 +24,8 @@ They aim to capture the timing behavior of the entire platform, including intera
 By considering these interactions, platform timing contracts can provide a more comprehensive understanding of potential timing channels and their implications for security.
 To verify the compliance of a CPU integrated into a specific platform using existing techniques that verify a CPU in isolation, we introduce an automatic instrumentation that captures the relevant platform-specific timing information while retaining compatibility with all existing hardware-software contract verification techniques.
 
-We establish the platform timing contracts for \textcolor{red}{3} different platforms.
-We apply the instrumentation corresponding to each platform to the \textcolor{red}{4} RISC-V CPUs \textcolor{red}{TODO List them}.
+We establish the platform timing contracts for four different platforms.
+We apply the instrumentation corresponding to each platform to the four RISC-V CPUs: \textcolor{red}{TODO List them}.
 Not only does the verification time increase by not more than ~\textcolor{red}{5}\%, but we demonstrate the existence of platform-specific timing channels on typical platforms, that would otherwise be missed.
 
 In summary, our contributions in this paper are:

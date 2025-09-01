@@ -2,4 +2,4 @@ Previous work has proposed means of mitigating some platform-related side channe
 Our work is orthogonal to these works and models a platform that is tolerated to have a specific set of potential side channels.
 Hardware-software contracts and some constant-time techniques~\cite{guarnieri2021hardware,wang2023specification,tan2025contractshadowlogic} typically consider the assumption that addresses of memory operations might eventually influence timing.
 But not all platforms will have such flows, and some platforms will also create reentrant timing flows from other CPU output signals as discussed in Section~\ref{sec:reentrant}.
-The \PICI that we introduce proposes fine-grained platform integration contracts, and makes them synthesizable so that they can directly be used upon techniques that are unaware of reentrant information flows as shown in Section~\ref{subsec:pics_eval}.
+The \PICI that we introduce proposes fine-grained platform integration contracts, and makes them synthesizable so that they can directly be used upon techniques that are unaware of reentrant information flows.
