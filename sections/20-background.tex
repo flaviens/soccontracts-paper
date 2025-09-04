@@ -64,7 +64,7 @@ Constant-time programming techniques, such as not using secret data as array ind
     \end{center}
     \vspace*{-1em}
     \caption{\label{fig:miter} Miter circuit. The two instances of the same design under test are supplied with the same secret data $s$ and unconstrained $p_1$ and $p_2$ public data. The output bit $y$ (i.e., instantiated for the instances in the miter as $y_1$ and $y_2$) reveals secret data if $x=1$ is satisfiable.}
-    \vspace*{-1em}
+    % \vspace*{-1em}
 \end{figure}
 
 Hardware information flows capture properties such as confidentiality and integrity~\cite{hu2021hardware}.
@@ -96,10 +96,11 @@ Most techniques consider a fixed contract~\cite{dinesh2024conjunct,ceesay2024muc
 Others leverage custom, non-trivial technique-specific insights to verify a wider variety contracts~\cite{hsiao2024rtl2mmupath,wang2023specification} using the same technique.
 
 \para{Discussion}
-\textcolor{red}{
-In this paper, we will introduce \pics, a novel abstraction for reasoning about platform-induced timing side-channels, and hence about different hardware-software contracts.
-We will introduce a synthesizable instrumentation generic across verification techniques.
-}
+All these techniques make assumptions about the platform in which the CPU is integrated, yet there exists no language that allows to formally express and verify them.
+% \textcolor{red}{
+% In this paper, we will introduce \pics, a novel abstraction for reasoning about platform-induced timing side-channels, and hence about different hardware-software contracts.
+% We will introduce a synthesizable instrumentation generic across verification techniques.
+% }
 % To understand information propagation and split responsibilities between hardware and software, past work has formalized the sequence of observable events produced by a CPU when executing a given program as a function of the initial microarchitectural state, the program and the data in memory.
 % This observation sequence is referred to as a hardware trace~\cite{oleksenko2022revizor}.
 % Possible hardware traces are specified as a contract~\cite{guarnieri2021hardware}, which stipulates an execution mode and an observation mode.
