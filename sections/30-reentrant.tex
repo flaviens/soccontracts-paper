@@ -41,38 +41,45 @@ Therefore, the integration of the CPU into a larger system can introduce new tim
 
 \subsection{Reentrant flows}
 
+We now describe and formalize reentrant information flows, which are at the core of the timing channels that can be introduced by platform integration.
+
 \para{Netlist graphs}
 We describe a digital hardware system (e.g., the one illustrated in Figure~\ref{fig:verifscopecache}), as a netlist $G = (V, E)$, where $V$ is the set of vertices representing logic gates such as AND, OR, NOT, flip-flops, adders, and $E$ is the set of directed wires between these vertices.
-We denote the subgraph of $G$ that corresponds to the CPU as $G_C = (V_C, E_C)$, where $V_C \subseteq V$ and $E_C \subseteq E$.
+We denote the subgraph of $G$ that corresponds to the CPU that is integrated in this system as $G_C = (V_C, E_C)$, where $V_C \subseteq V$ and $E_C \subseteq E$.
 In particular, for all edges $(u, v) \in E_C$, both $u$ and $v$ are vertices in $V_C$.
-We denote the complementary subgraph as $G_{P} = (V_{P}, E_{P})$, where $V_{P} = V \setminus V_C$ and $E_{P} = E \setminus E_C$.
+We denote the complementary subgraph as $G_{P} = (V_{P}, E_{P})$, where $V_{P} = V \setminus V_C$ and $E_{P} = E \setminus E_C$, corresponding to the platform except the CPU that it integrates.
 
 \para{Constant-time programs \& secret data}
 For a given constant-time verification technique, let us denote by $\mathcal{P}$ the set of constant-time programs that are considered for verification.
 The elements of the set $\mathcal{P}$ are triples $\tau = (P, M_p, M_s)$, where $P$ is a constant-time program, $M_p$ is the set of public memory valuations, and $M_s$ is the set of secret values that the program may depend on.
 Specifically, this set $\mathcal{P}$ depends on the specific constant-time verification technique being used.
-For example, for ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., part of $\mathcal{P}$) if it contains no unsafe memory instructions (independently of how secret data is used).
+For example, for ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., part of $\mathcal{P}$) if it contains no so-called "unsafe" instructions, i.e., instructions that can create an operand-dependent timing channel.
 For Tan et al.~\cite{tan2025contractshadowlogic}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., part of $\mathcal{P}$) if it ensures that the program's control flow and all memory accesses are independent of secret data.
+The conditions for a program to be constant-time with respect to ConjunCT's and VeloCT's definition are stricter than those of Tan et al.~\cite{tan2025contractshadowlogic}, as the latter generally forbid branches, for instance.
+Inclusively more restrictive constraints imply an inclusively smaller set $\mathcal{P}$ of constant-time programs.
 
 \para{Secret propagation}
-Constant-time verification techniques generally proceed by analyzing whether the valuation of a state element can be influenced by secret information.
+Constant-time verification techniques generally proceed by analyzing whether the valuation of a state element that captures timing differences can be influenced by secret information.
 For example, Tan et al.~\cite{tan2025contractshadowlogic}, LeaVe~\cite{wang2023specification}, ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h} monitor whether secret information can influence the commit signal, while \ucfi~\cite{ceesay2024mucfi} monitors whether secret information can influence a microarchitectural program counter structure.
 
 We define the \emph{valuation sequence} $\nu$ of a vertex.
 For a vertex $v \in V$ and a triple $\tau = (P, M_p, M_s)$, the valuation sequence $\nu_\tau(v)$ is the clock-accurate infinite sequence of valuations that the vertex takes during the execution of a program $P$ with respect to the memory valuations $M_p$ and $M_s$, starting from the CPU's and platform's reset state, assumed deterministic.
-Note that we assume determinism for simplicity without loss of generality; to account for non-determinism, we could consider a set $\nu_\tau^{\text{non-det}}(v)$ of all possible valuation sequences without change in the reasoning that follows.
+Note that we assume determinism for simplicity without loss of generality; to account for non-determinism, we could consider a set $\nu_\tau^{\text{non-det}}(v)$ of all possible valuation sequences instead of a single sequence $\nu_\tau(v)$, without change in the following reasoning.
 
 We denote by $V^s$ the set of vertices in $V$ whose valuation sequence can be influenced by secret information when the system executes a program written in constant-time with respect to the secret data.
-That is, an element $v \in V$ belongs to $V^s$ if and only if there exist two triples $\tau = (P, M_p, M_s)$ and $\tau' = (P, M_p, M_s')$ that only differ in $M_s'$, and such that $\tau \in \mathcal{P}$ and $\tau' \in \mathcal{P}$ but $\nu_\tau(v) \neq \nu_{\tau'}(v)$.
+An element $v \in V$ belongs to $V^s$ if and only if there exist two triples $\tau = (P, M_p, M_s)$ and $\tau' = (P, M_p, M_s')$ that only differ in $M_s'$, and such that $\tau \in \mathcal{P}$ and $\tau' \in \mathcal{P}$ but $\nu_\tau(v) \neq \nu_{\tau'}(v)$.
 We say that a vertex $v \in V$ is \emph{secret-dependent} if it belongs to $V^s$.
 
 For a secret-dependent vertex $v \in V^s$, we define the set $P^s_v$ of \emph{secret propagation paths} to be the paths in the graph $G$ that connect the source of secrets (that can take the value $M_s$ or $M_s'$) to $v$, where all the vertices in the path are secret-dependent.
-In particular, $P^s_v$ is non-empty, as if $v \in V^s$, then at least one predecessor $u \in V$ of $v$ must also be secret-dependent, which recursively constructs a path in $P^s_u$.
+In particular, $P^s_v$ is non-empty.
+Indeed, if $v \in V^s$, then at least one predecessor $u \in V$ of $v$ must also be secret-dependent, which recursively constructs a path in $P^s_u$.
 
-Let us consider a strict subgraph $G' = (V', E') \subsetneq G$ and a vertex $v \in V'$.
+Let us consider a strict subgraph $G' = (V', E') \subsetneq G$ and a vertex $v \in V'^s$.
 A path $p$ in $P^s_v$ is said to be \emph{reentrant} in $G'$ if it contains at least one vertex $u \in V \setminus V'$, i.e., a vertex that is outside of $G'$.
+Note that this $u$ also belongs to $V^s\setminus V'$ because all nodes in $p$ are secret-dependent by definition of $P^s_v$.
 If all paths in $P^s_v$ are reentrant in $G'$, then we say that the vertex $v$ is \emph{fully reentrant} in $G'$.
 
+\para{Example}
 Let us consider again the system Figure~\ref{fig:verifscopecache} (a) where $\mathcal{P}$ describes programs where secret data, which is for example initially stored in a well-specified general-purpose register, can be used as the address of a memory instruction.
 Because the CPU itself does not contain caches or other components whose timing depends on memory addresses, for $v$ designating the commit signal (for LeaVe~\cite{wang2023specification}, Tan et al.~\cite{tan2025contractshadowlogic}, ConjunCT~\cite{dinesh2024conjunct} or VeloCT~\cite{dinesh2025h}), or a microarchitectural PC signal (\ucfi~\cite{ceesay2024mucfi}), $v$ is fully-reentrant in the CPU, if we consider $G$ being the whole platform, and $G'$ being the CPU.
 
@@ -86,26 +93,36 @@ We base our analysis on the widely-studied RISC-V ISA.
 The output signals of a RISC-V CPU are all through memory interfaces, which are made of data and control signals.
 \fls{TODO Maybe change all "CPU"'s with "CPU core"}
 Data signals transport the data to be read or written to or from the memory.
-Control signals transport the information about the memory transaction, such as the memory address, handshake signals, and depending on the memory bus protocol (e.g., AMBA AXI \cite{arm_amba_axi4} or TileLink \cite{tilelink_spec}), further control signals such as the type of transaction and the size of the data to be read or written.
+Control signals transport the information about the memory transaction, such as the memory address, handshake signals, and depending on the memory bus protocol (e.g., AMBA AXI~\cite{arm_amba} or TileLink~\cite{tilelink_spec}), further control signals such as the type of transaction and the size of the data to be read or written.
 Input signals of a RISC-V CPU can be more diverse.
-They include memory input data and control signals, interrupt lines, and various other control signals, for example clock signals if the CPU can be clock-gated.
+They include memory input data and control signals, interrupt lines, and various other control signals such as clock gating signals.
+
+\para{Platform timing contracts}
+The goal of platform timing contracts is to ensure that state elements that capture timing differences, such as the commit signal or a microarchitectural program counter, \emph{are not fully reentrant} in the CPU.
+To ensure this, a platform timing contract specifies an upper bound of the information flows between the output signals of the CPU and its input signals.
+We express a platform timing contract as a list of rules, listed per output signal of the CPU.
+% \textcolor{red}{TODO Continuer ici.}
 
 
 \para{Example contracts}
-We provide some example contracts for a RISC-V CPU with a Von Neumann architecture, where we model the memory interface as an address bus, an incoming and an outgoing memory data port, and a simple valid-ready handshake protocol, similar to the \texttt{req} and \texttt{gnt} handshake signals in the Hardware Processing Engines (HWPE) 2.0 interface protocol~\cite{pulpHWPEMem}, where \texttt{req} is asserted by the CPU and \texttt{gnt} by the memory system.
-Equation~\ref{dict:contract_nocache} defines a simple integration contract for a platform with ideal memory that responds with a timing that is address-independent: a change in the memory transaction control signals from the CPU can only change the returned value.
-Indeed, a change in the address of a read, for example, might read from a memory cell that contains a different value, and a change, for example in the timing of some request signal will affect the timing of the memory response, and hence the memory read data at some point in time.
+We provide some example contracts for a RISC-V CPU with a Von Neumann architecture, where we model the memory interface as an outbound address bus (\texttt{addr}), an inbound and an outbound memory data port (respectively \texttt{rdata} and \texttt{wdata}), and a simple valid-ready handshake protocol (inbound \texttt{resp} and outbound \texttt{req}), similar to the \texttt{req} and \texttt{gnt} handshake signals in the Hardware Processing Engines (HWPE) 2.0 interface protocol~\cite{pulpHWPEMem}.
+Equation~\ref{dict:contract_nocache} defines a simple integration contract for a platform with ideal memory that responds with a constant timing (i.e., that is address-independent).
+A change in the memory transaction control signals from the CPU can only change the returned value.
+Only the request signal (\texttt{req}) can affect the existence, and hence the timing, of a memory response.
+% Indeed, a change in the address of a read, for example, might read from a memory cell that contains a different value, and a change, for example in the timing of some request signal will affect the timing of the memory response, and hence the memory read data at some point in time.
 The diamond $\lozenge$ underlines that the right-hand side of the implication can happen at any time and for any number of times after the left-hand side.
-\fls{Maybe I should explain more intuitions like why mem\_req and mem\_addr actually have exactly the same effect.}
+\fls{Maybe I should explain more intuitions like why req and addr actually have exactly the same effect.}
 Equation~\ref{dict:contract_cache_nointerrupt} adds timing dependence on the memory address, which is typical of structures like caches.
+In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indeed, a change in the address of a read, for example, can change a cache miss into a cache hit, changing the timing, and hence the value at some point in time, of the response, including the \texttt{gmt} control signal and the \texttt{rdata} data signals.
 Equation~\ref{dict:contract_cache_interrupt} models data-dependent interrupts and timing, which might occur, for example, if some peripheral can be controlled through memory-mapped registers such as an interrupt controller~\cite{riscv_plic_spec_1_0_0}.
 
 \para{Conditional refinements}
 Equation~\ref{dict:contract_cache_interrupt} implies that writing tainted, i.e., secret, data to memory with a specific address that is not tainted might always trigger an interrupt or affect the timing of the memory response. In some settings, this might be true only for specific address ranges where peripherals are mapped, but parts of the memory address range can typically be used in a data-independent timing.
 To refine this contract, we introduce address-dependent contracts as in Equation~\ref{dict:contract_cache_interrupt_addressdependent}, where the right-hand side of the implication depends on the memory address set \texttt{periph\_range}, which is a fixed set of addresses.
-Note that the contract could also be refined by making the interrupts dependent on the written data. For example, an interrupt might never be triggered, whatever the address, if the written data is zero, for the class of platforms of interest for the CPU integrator.
-In verification, such constraints can be expressed as data-independent timing assuming that the CPU does not write to memory addresses in \texttt{periph\_range} with tainted data.
-For example, this can be achieved with RISC-V Physical Memory Protection (PMP)~\cite{riscv_privileged} in a setting where the most privileged execution mode does not access secret data and protects the \texttt{periph\_range} address range from being accessed from lower privileged, in the line of trusted execution environments~\cite{lee2019keystone,costan2016sanctum,mckeen2013intel,arm2009trustzone,nasahl2020hector,mcgillion2015opentee,lebedev2018sanctorum,schneider2022sok,bourgeat2018mi6,brasser2022tcx}.
+% Note that the contract could also be refined by making the interrupts dependent on the written data.
+% For example, an interrupt might never be triggered, whatever the address, if the written data is zero, for the class of platforms of interest for the CPU integrator.
+% In verification, such constraints can be expressed as data-independent timing assuming that the CPU does not write to memory addresses in \texttt{periph\_range} with tainted data.
+For example, this can be achieved with RISC-V Physical Memory Protection (PMP)~\cite{riscv_privileged} in a setting where the most privileged execution mode does not access secret data and protects the \texttt{periph\_range} address range from being accessed from lower privileges, in the philosophy of trusted execution environments~\cite{lee2019keystone,costan2016sanctum,mckeen2013intel,arm2009trustzone,nasahl2020hector,mcgillion2015opentee,lebedev2018sanctorum,schneider2022sok,bourgeat2018mi6,brasser2022tcx}.
 
 % \fls{TODO Say that we will have a reference contract later for the end-to-end attack.}
 % \fls{TODO Say the right-hand side can be anytime after, and for any number of time. Maybe write this as an LTL formula.}
@@ -113,43 +130,43 @@ For example, this can be achieved with RISC-V Physical Memory Protection (PMP)~\
 \begin{equation}
 \label{dict:contract_nocache}
 \begin{array}{rcl}
-\text{mem\_req} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}\} \\
-\text{mem\_we} & \rightarrow & \lozenge \{\text{mem\_rdata}\} \\
-\text{mem\_addr} & \rightarrow & \lozenge \{ \text{mem\_rdata}\} \\
-\text{mem\_wdata} & \rightarrow & \lozenge \{ \text{mem\_rdata} \} \\
+\text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+\text{we} & \rightarrow & \lozenge \{\text{rdata}\} \\
+\text{addr} & \rightarrow & \lozenge \{ \text{rdata}\} \\
+\text{wdata} & \rightarrow & \lozenge \{ \text{rdata} \} \\
 \end{array}
 \end{equation}
 
 \begin{equation}
 \label{dict:contract_cache_nointerrupt}
 \begin{array}{rcl}
-\text{mem\_req} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}\} \\
-\text{mem\_we} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}\} \\
-\text{mem\_addr} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}\} \\
-\text{mem\_wdata} & \rightarrow & \lozenge \{ \text{mem\_rdata} \} \\
+\text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+\text{we} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+\text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+\text{wdata} & \rightarrow & \lozenge \{ \text{rdata} \} \\
 \end{array}
 \end{equation}
 
 \begin{equation}
 \label{dict:contract_cache_interrupt}
 \begin{array}{rcl}
-\text{mem\_req} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}, \text{interrupt}\} \\
-\text{mem\_we} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}, \text{interrupt}\} \\
-\text{mem\_addr} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}, \text{interrupt}\} \\
-\text{mem\_wdata} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}, \text{interrupt} \} \\
+\text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+\text{we} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+\text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+\text{wdata} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt} \} \\
 \end{array}
 \end{equation}
 
 \begin{equation}
 \label{dict:contract_cache_interrupt_addressdependent}
 \begin{array}{rcl}
-\text{mem\_req}  & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}, \text{interrupt}\} \\
-\text{mem\_we}  & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}, \text{interrupt}\} \\
-\text{mem\_addr} & \rightarrow & \lozenge \{ \text{mem\_gnt}, \text{mem\_rdata}, \text{interrupt}\} \\
-% \text{mem\_wdata} & \rightarrow & \lozenge \{ \text{mem\_rdata}, \text{interrupt} \} \\
-\text{mem\_wdata} & \rightarrow & \lozenge \{ \text{mem\_rdata}, \\
-& & \text{mem\_gnt if mem\_addr in periph\_range} \\
-& & \text{interrupt if mem\_addr in periph\_range} \} \\
+\text{req}  & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+\text{we}  & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+\text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+% \text{wdata} & \rightarrow & \lozenge \{ \text{rdata}, \text{interrupt} \} \\
+\text{wdata} & \rightarrow & \lozenge \{ \text{rdata}, \\
+& & \text{gnt if addr in periph\_range} \\
+& & \text{interrupt if addr in periph\_range} \} \\
 
 \end{array}
 \end{equation}
@@ -159,7 +176,7 @@ Like for sinks, we can define a partial ordering of \pics.
 We say that a contract A is (inclusively) stronger than a contract B if for every output of the CPU (i.e., the left-hand side of the arrow in the contract), the set of possible CPU inputs tainted by this output in contract A is a subset of the set of possible CPU inputs tainted by this output in contract B.
 Said otherwise, contract A is stronger than contract B if it allows for fewer possible information flows.
 For example, Equation~\ref{dict:contract_cache_interrupt_addressdependent} is stronger than Equation~\ref{dict:contract_cache_interrupt}, and Equation~\ref{dict:contract_cache_nointerrupt} is stronger than Equation~\ref{dict:contract_cache_interrupt}.
-A CPU that is verified to have a constant-time behavior with respect to a stronger \pic will also be verified to have a constant-time behavior with respect to a weaker \pic.
+A CPU that is verified to have a constant-time behavior with respect to a stronger \pic is also verified with respect to a weaker \pic.
 
 \begin{figure}
     \begin{center}
