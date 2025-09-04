@@ -10,7 +10,7 @@ Finally, we introduce platform integration contracts to capture these reentrant 
     \end{center}
     \vspace*{-1em}
     \caption{\label{fig:verifscopecache}
-        Example verification scopes, represented as dotted boxes. (a: cache excluded) the cache is considered part of the platform. (b: cache included) the cache is considered part of the CPU core.
+        Example verification scopes, represented as dotted boxes. (a: cache excluded) the cache is considered part of the platform. (b: cache included) the cache is considered part of the CPU.
     }
     \vspace*{-1em}
 \end{figure}
@@ -91,7 +91,7 @@ Since the interface between the output signals of a CPU and the rest of a SoC is
 \para{Interface}
 We base our analysis on the widely-studied RISC-V ISA.
 The output signals of a RISC-V CPU are all through memory interfaces, which are made of data and control signals.
-\fls{TODO Maybe change all "CPU"'s with "CPU core"}
+% \fls{TODO Maybe change all "CPU"'s with "CPU core"}
 Data signals transport the data to be read or written to or from the memory.
 Control signals transport the information about the memory transaction, such as the memory address, handshake signals, and depending on the memory bus protocol (e.g., AMBA AXI~\cite{arm_amba} or TileLink~\cite{tilelink_spec}), further control signals such as the type of transaction and the size of the data to be read or written.
 Input signals of a RISC-V CPU can be more diverse.
@@ -111,7 +111,7 @@ A change in the memory transaction control signals from the CPU can only change 
 Only the request signal (\texttt{req}) can affect the existence, and hence the timing, of a memory response.
 % Indeed, a change in the address of a read, for example, might read from a memory cell that contains a different value, and a change, for example in the timing of some request signal will affect the timing of the memory response, and hence the memory read data at some point in time.
 The diamond $\lozenge$ underlines that the right-hand side of the implication can happen at any time and for any number of times after the left-hand side.
-\fls{Maybe I should explain more intuitions like why req and addr actually have exactly the same effect.}
+% \fls{Maybe I should explain more intuitions like why req and addr actually have exactly the same effect.}
 Equation~\ref{dict:contract_cache_nointerrupt} adds timing dependence on the memory address, which is typical of structures like caches.
 In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indeed, a change in the address of a read, for example, can change a cache miss into a cache hit, changing the timing, and hence the value at some point in time, of the response, including the \texttt{gmt} control signal and the \texttt{rdata} data signals.
 Equation~\ref{dict:contract_cache_interrupt} models data-dependent interrupts and timing, which might occur, for example, if some peripheral can be controlled through memory-mapped registers such as an interrupt controller~\cite{riscv_plic_spec_1_0_0}.
