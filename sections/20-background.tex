@@ -33,18 +33,17 @@ In this section, we provide background on SoC platforms, timing side-channels an
     \vspace*{-1em}
 \end{figure}
 
-In this paper, we use the words SoC and platform interchangeably to refer to the integrated circuit that incorporates all components of a computer onto a single chip.
-As illustrated in Figure~\ref{fig:exampleplatform}, SoC platforms may integrate various components, including CPUs, memory, and peripherals, to provide a complete computing solution.
+In this paper, we use the words SoC and platform interchangeably to refer to the integrated circuit that integrates various components, including CPUs, memory, and peripherals, to provide a complete computing solution, as illustrated in Figure~\ref{fig:exampleplatform}.
 The communication between these components is typically managed through standardized bus protocols, such as AMBA~\cite{arm_amba} and TileLink~\cite{tilelink_spec}.
-Note that the bounds of components are not always clear-cut.
-For example, caches can be considered part of the CPU or of the platform.
+The bounds of components are not always clear-cut.
+For example, caches can be considered part of the CPU or of the platform, as shown in Figure~\ref{fig:verifscopecache}.
 
 \subsection{Timing side-channels}
 
 Multiple hardware optimizations, such as caches and branch predictors, learn and exploit patterns in program execution to improve performance.
 In particular, the execution time of later instructions may depend on the outcome of earlier instructions.
 For example, accessing a cache line might be faster if the line has been brought into the cache recently by a prior memory access to a nearby location.
-Timing side channels can result from such optimizations when the timing of a program's execution depends on secret data.
+% Timing side channels can result from such optimizations when the timing of a program's execution depends on secret data.
 Constant-time programming techniques, such as not using secret data as array indices, aim to ensure that secrets do not influence the execution time of a program through such channels~\cite{OsvikShamirTromer2006CacheAES,AlmeidaEtAl2016CTVerif}.
 
 \subsection{Information Flow Tracking}
@@ -68,7 +67,8 @@ Constant-time programming techniques, such as not using secret data as array ind
     \vspace*{-1em}
 \end{figure}
 
-Information flows capture properties such as confidentiality and integrity~\cite{hu2021hardware}.
+Hardware information flows capture properties such as confidentiality and integrity~\cite{hu2021hardware}.
+They are typically captured using one of two techniques.
 First, they can be measured by augmenting the hardware design under verification with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Figure~\ref{fig:glift}.
 Second, they can also be compared using a so-called miter circuit, comparing the outputs of two copies of the design under test, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Figure~\ref{fig:miter}.
 
@@ -81,8 +81,8 @@ Second, they can also be compared using a so-called miter circuit, comparing the
 
 \para{Contract definition}
 Hardware-software contracts~\cite{guarnieri2021hardware} split confidentiality responsibilities between the CPU and the software that it executes.
-For a given program, an initial microarchitectural state, and the contents of memory, the contract fixes an execution mode and an observation mode.
-The \emph{execution mode} determines which instructions (beyond those architecturally present) may be executed and generate events.
+For an initial microarchitectural state, a given program $\mathcal{P}$, and the contents of memory containing public information $M_p$ and secret information $M_s$, the contract fixes an execution mode and an observation mode.
+The \emph{execution mode} determines which instructions are executed (potentially transiently) and generate events.
 The \emph{observation mode} determines which of those events are exposed to an observer (possibly transiently), such as the addresses or values involved in memory accesses. Under these two choices, the CPU's behavior is summarized as a sequence of observable events known as a hardware trace~\cite{guarnieri2021hardware,oleksenko2022revizor}.
 
 % \subsection{Hardware-software contract verification}
@@ -93,12 +93,13 @@ The \emph{observation mode} determines which of those events are exposed to an o
 \para{Contract verification}
 Multiple independent verification efforts have been conducted to ensure that hardware-software contracts are upheld during program execution, in particular regarding constant-time behavior~\cite{dinesh2024conjunct,ceesay2024mucfi,guarnieri2021hardware,tan2025contractshadowlogic,dinesh2025h,hsiao2024rtl2mmupath,wang2023specification}.
 Most techniques consider a fixed contract~\cite{dinesh2024conjunct,ceesay2024mucfi,tan2025contractshadowlogic,dinesh2025h}.
-Others leverage custom, non-trivial insights and techniques to verify specific contracts~\cite{hsiao2024rtl2mmupath,wang2023specification}.
+Others leverage custom, non-trivial technique-specific insights to verify a wider variety contracts~\cite{hsiao2024rtl2mmupath,wang2023specification} using the same technique.
 
 \para{Discussion}
+\textcolor{red}{
 In this paper, we will introduce \pics, a novel abstraction for reasoning about platform-induced timing side-channels, and hence about different hardware-software contracts.
 We will introduce a synthesizable instrumentation generic across verification techniques.
-
+}
 % To understand information propagation and split responsibilities between hardware and software, past work has formalized the sequence of observable events produced by a CPU when executing a given program as a function of the initial microarchitectural state, the program and the data in memory.
 % This observation sequence is referred to as a hardware trace~\cite{oleksenko2022revizor}.
 % Possible hardware traces are specified as a contract~\cite{guarnieri2021hardware}, which stipulates an execution mode and an observation mode.

@@ -137,6 +137,7 @@ To verify, for example, the last arrow of Equation~\ref{dict:contract_cache_inte
 We then verify that only \texttt{mem\_rdata} can be affected by changes to \texttt{mem\_wdata} by \texttt{xor}'ing the outputs of \texttt{mem\_gnt} for the two copies of the platform in the miter together and expressing a SAT formula on this signal, which should never be set.
 Table~\ref{tab:verif_platform_compliance_results} summarizes the verification results obtained with Cadence Jaspergold for the different platforms.
 The total duration of the experiment does not exceed one minute.
+\fls{TODO report the simulation results for no violation found.}
 
 \fls{Takeaway box: Given a platform specification, \PICI includes reentrant information flows in the verification of constant-time properties, even if the underlying verification technique initially did not account for them}
 % \takeawayBox{Given a platform specification, \PICI includes reentrant information flows in the verification of constant-time properties, even if the underlying verification technique initially did not account for them.}
