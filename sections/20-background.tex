@@ -69,8 +69,10 @@ Constant-time programming techniques, such as not using secret data as array ind
 
 Hardware information flows capture properties such as confidentiality and integrity~\cite{hu2021hardware}.
 They are typically captured using one of two techniques.
-First, they can be measured by augmenting the hardware design under verification with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Figure~\ref{fig:glift}.
-Second, they can also be compared using a so-called miter circuit, comparing the outputs of two copies of the design under test, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Figure~\ref{fig:miter}.
+The first technique is called dynamic information flow tracking (DIFT).
+It captures information flows by augmenting the hardware design under verification with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Figure~\ref{fig:glift}.
+The second technique is called miter circuits.
+It captures information flows by comparing the outputs of two copies of the design under test, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Figure~\ref{fig:miter}.
 
 
 
