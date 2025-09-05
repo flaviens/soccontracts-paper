@@ -101,6 +101,7 @@ They include memory input data and control signals, interrupt lines, and various
 The goal of platform timing contracts is to ensure that state elements that capture timing differences, such as the commit signal or a microarchitectural program counter, \emph{are not fully reentrant} in the CPU.
 To ensure this, a platform timing contract specifies an upper bound of the information flows between the output signals of the CPU and its input signals.
 We express a platform timing contract as a list of rules, listed per output signal of the CPU.
+In Section~\ref{sec:instrumentation}, we introduce synthesizable constructs that create paths between secret sources and sinks, to ensure that the sets $P^s_v$ are not empty for these sinks, preventing these sinks from being fully-reentrant.
 % \textcolor{red}{TODO Continuer ici.}
 
 
