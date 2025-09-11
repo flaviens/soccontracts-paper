@@ -38,8 +38,10 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
 \begin{table}[t]
     \vspace*{1.2em}
     \centering
-    \caption{Verification results for the original Sodor (O) design, for \PICI-instrumented (Equation~\ref{dict:contract_cache_nointerrupt}) Sodor (P). Results are "pass" if memory instructions are considered safe with regard to all their operands (and in particular with regard to the address).
-    \textcolor{red}{TODO Add results for no-violation scenarios.}
+    \caption{Verification results for the original Sodor (SO) and Kronos (KO), and for \PICI-instrumented (Equation~\ref{dict:contract_cache_nointerrupt}) Sodor (SP) and Kronos (KP). Results are "pass" if all memory instructions are considered safe with regard to all their operands (and in particular with regard to the address when it comes to loads and stores).
+    Time indicates time to obtain a proof for a subset of instructions that excludes memory instructions if they are shown to be non-constant-time.
+    The time shown for \ucfi is the mean time to prove a instruction.
+    \textcolor{red}{TODO Make double-columns to horizontalize the table.}
     }
     \vspace*{-.4em}
     \small
@@ -48,13 +50,21 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
         \rowcolor{gray!20} % Color for the table header
         & \textbf{\ucfi} & \textbf{VeloCT} \\
         \hline
-        Time  (O) & 8\,min & 1\,min \\
+        Time  (SO) & 8\,min & 1\,min \\
         \hline
-        Result (O) & Pass \gcheck & Pass \gcheck \\
+        Result (SO) & Pass \gcheck & Pass \gcheck \\
         \hline
-        Time (P)  & 10\,min & 1\,min \\
+        Time (SP)  & 10\,min & 1\,min \\
         \hline
-        Result (P) & Fail \rcross & Fail \rcross \\
+        Result (SP) & Fail \rcross & Fail \rcross \\
+        \hline
+        Time  (KO) & 31\,min & 1\,min \\
+        \hline
+        Result (KO) & Pass \gcheck & Pass \gcheck \\
+        \hline
+        Time (KP)  & 31\,min & 1\,min \\
+        \hline
+        Result (KP) & Fail \rcross & Fail \rcross \\
         \hline
     \end{tabular}
     \vspace*{-.4em}
