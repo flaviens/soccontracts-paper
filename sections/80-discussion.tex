@@ -1,4 +1,4 @@
-ISAs like RISC-V~\cite{riscv_privileged} communicate with the rest of the system through memory interfaces.
-Some other ISAs like x86~\cite{intel_x86_manual} have special I/O instructions that are not memory-mapped.
+ISAs like RISC-V communicate with the rest of the system through memory interfaces.
+Some other ISAs like x86 have special I/O instructions that are not memory-mapped.
 The reasoning about \pics for these ISAs would need to account for the different ways in which they interact with the system and might incur more clauses in the contracts to account for these two separate channels for communicating with the system.
-System-level instructions of ISAs like MIPS~\cite{mips_isa} (e.g., the \texttt{mfc0} instruction) or ARM~\cite{armv8_isa} (e.g., the \texttt{SVC} instruction) also require additional ports to include into contracts to describe how the system might react.
+System-level instructions of ISAs like MIPS~\cite{mips_isa} (e.g., the \texttt{mfc0} instruction) or ARM (e.g., the \texttt{SVC} instruction) also require additional ports to include into contracts to describe how the system might react.

@@ -896,7 +896,6 @@
   institution  = {OpenTitan Documentation},
   year         = {2025},
   type         = {Guidelines},
-  note         = {Recommends ECC on memories and critical datapaths},
   url          = {https://opentitan.org/book/doc/security/implementation_guidelines/hardware/index.html}
 }
 @manual{riscv_privileged,
@@ -905,7 +904,6 @@
   year         = {2021},
   edition      = {Version 1.12-draft},
   organization = {RISC-V International},
-  note         = {Defines Physical Memory Protection (PMP) in Chapter 3},
   url          = {https://github.com/riscv/riscv-isa-manual/releases/latest/download/riscv-privileged.pdf}
 }
 @techreport{riscv_plic_spec_1_0_0,
@@ -915,7 +913,6 @@
   year         = {2023},
   type         = {Technical Report},
   number       = {Version 1.0.0 (ratified March 11, 2023)},
-  note         = {Specifies PLIC architecture, interrupt prioritization, claims/completion},
   url          = {https://github.com/riscv/riscv-plic-spec/blob/master/riscv-plic-1.0.0.pdf}
 }
 
@@ -1006,7 +1003,6 @@
   address      = {Mountain View, CA, USA},
   month        = sep,
   year         = 1995,
-  note         = {MIPS IV ISA specification}
 }
 @Manual{armv8_isa,
   title        = {{Arm® Architecture Reference Manual Armv8, for Armv8-A architecture profile (Issue G.a)}},
@@ -1014,7 +1010,6 @@
   organization = {Arm Limited},
   address      = {Cambridge, UK},
   year         = 2021,
-  note         = {DDI 0487G.a – includes Armv8.7 extensions},
 }
 @book{intel_x86_manual,
   title        = {Intel® 64 and IA-32 Architectures Software Developer's Manual},
@@ -1022,7 +1017,6 @@
   year         = {2022},
   volume       = {1-3},
   publisher    = {Intel Corporation},
-  note         = {Available at \url{https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html}},
   howpublished = {\url{https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html}}
 }
 
@@ -1044,91 +1038,77 @@
   year={2023}
 }
 @inproceedings{saileshwar2021mirage,
-  title={$\{$MIRAGE$\}$: Mitigating $\{$Conflict-Based$\}$ cache attacks with a practical $\{$Fully-Associative$\}$ design},
+  title={MIRAGE: Mitigating Conflict-Based cache attacks with a practical Fully-Associative design},
   author={Saileshwar, Gururaj and Qureshi, Moinuddin},
-  booktitle={30th USENIX Security Symposium (USENIX Security 21)},
+  booktitle={USENIX Security},
   year={2021}
 }
 @inproceedings{giner2023scatter,
   title={Scatter and split securely: Defeating cache contention and occupancy attacks},
   author={Giner, Lukas and Steinegger, Stefan and Purnal, Antoon and Eichlseder, Maria and Unterluggauer, Thomas and Mangard, Stefan and Gruss, Daniel},
-  booktitle={2023 IEEE Symposium on Security and Privacy (SP)},
-  year={2023},
-  organization={IEEE}
+  booktitle={IEEE SP},
+  year={2023}
 }
 @inproceedings{werner2019scattercache,
-  title={$\{$ScatterCache$\}$: thwarting cache attacks via cache set randomization},
+  title={ScatterCache: thwarting cache attacks via cache set randomization},
   author={Werner, Mario and Unterluggauer, Thomas and Giner, Lukas and Schwarz, Michael and Gruss, Daniel and Mangard, Stefan},
-  booktitle={28th USENIX Security Symposium (USENIX Security 19)},
+  booktitle={USENIX Security},
   year={2019}
 }
 @inproceedings{qureshi2018ceaser,
   title={CEASER: Mitigating conflict-based cache attacks via encrypted-address and remapping},
   author={Qureshi, Moinuddin K},
-  booktitle={2018 51st Annual IEEE/ACM International Symposium on Microarchitecture (MICRO)},
-  year={2018},
-  organization={IEEE}
+  booktitle={IEEE Micro},
+  year={2018}
 }
 
 @article{wassel2013surfnoc,
   title={SurfNoC: A low latency and provably non-interfering approach to secure networks-on-chip},
   author={Wassel, Hassan MG and Gao, Ying and Oberg, Jason K and Huffmire, Ted and Kastner, Ryan and Chong, Frederic T and Sherwood, Timothy},
   journal={ACM SIGARCH Computer Architecture News},
-  volume={41},
-  number={3},
-  year={2013},
-  publisher={ACM New York, NY, USA}
+  year={2013}
 }
 @inproceedings{wang2012efficient,
   title={Efficient timing channel protection for on-chip networks},
   author={Wang, Yao and Suh, G Edward},
-  booktitle={2012 IEEE/ACM Sixth International Symposium on Networks-on-Chip},
-  year={2012},
-  organization={IEEE}
+  booktitle={IEEE/ACM NOCS},
+  year={2012}
 }
 @inproceedings{schoeberl2012statically,
   title={A statically scheduled time-division-multiplexed network-on-chip for real-time systems},
   author={Schoeberl, Martin and Brandner, Florian and Spars{\o}, Jens and Kasapaki, Evangelia},
-  booktitle={2012 IEEE/ACM Sixth International Symposium on Networks-on-Chip},
-  year={2012},
-  organization={IEEE}
+  booktitle={IEEE/ACM NOCS},
+  year={2012}
 }
 @article{wassel2014networks,
   title={Networks on chip with provable security properties},
   author={Wassel, Hassan MG and Gao, Ying and Oberg, Jason K and Huffmire, Ted and Kastner, Ryan and Chong, Frederic T and Sherwood, Timothy},
   journal={IEEE Micro},
-  volume={34},
-  number={3},
   year={2014}
 }
 @article{psarras2015phasenoc,
   title={PhaseNoC: Versatile network traffic isolation through TDM-scheduled virtual channels},
   author={Psarras, Anastasios and Lee, Junghee and Seitanidis, Ioannis and Nicopoulos, Chrysostomos and Dimitrakopoulos, Giorgos},
-  journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},
-  volume={35},
-  number={5},
+  journal={IEEE TCAD},
   year={2015}
 }
 @inproceedings{alonso2019low,
   title={A low-latency and flexible TDM NoC for strong isolation in security-critical systems},
   author={Alonso, Miguel Gorgues and Flich, Jos{\'e} and Turki, Meriem and Bertozzi, Davide},
-  booktitle={2019 IEEE 13th International Symposium on Embedded Multicore/Many-core Systems-on-Chip (MCSoC)},
+  booktitle={IEEE MCSoC},
   year={2019},
   organization={IEEE}
 }
 @article{sadeghi2019toward,
   title={Toward on-chip network security using runtime isolation mapping},
   author={Sadeghi, Mohammad Sadegh and Sarmadi, Siavash Bayat and Hessabi, Shaahin},
-  journal={ACM Transactions on Architecture and Code Optimization (TACO)},
-  volume={16},
-  number={3},
-  year={2019},
-  publisher={ACM New York, NY, USA}
+  journal={ACM TACO},
+  year={2019}
 }
 @inproceedings{shalaby2021sentry,
   title={Sentry-NoC: A statically-scheduled NoC for secure SoCs},
   author={Shalaby, Ahmed and Tavva, Yaswanth and Carlson, Trevor E and Peh, Li-Shiuan},
-  booktitle={Proceedings of the 15th IEEE/ACM International Symposium on Networks-on-Chip},
+  booktitle={IEEE/ACM NOCS},
   year={2021}
 }
 
@@ -1213,15 +1193,12 @@
 @inproceedings{AlmeidaEtAl2016CTVerif,
   author    = {Almeida, Jose Bacelar and Barbosa, Manuel and Barthe, Gilles and Dupressoir, Francois and Emmi, Michael},
   title     = {Verifying Constant-Time Implementations},
-  booktitle = {25th USENIX Security Symposium (USENIX Security 16)},
-  address   = {Austin, TX, USA},
-  year      = {2016},
-  url       = {https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_almeida.pdf}
+  booktitle = {USENIX Security},
+  year      = {2016}
 }
 @inproceedings{herzog2021price,
   title={The price of Meltdown and Spectre: Energy overhead of mitigations at operating system level},
   author={Herzog, Benedict and Reif, Stefan and Preis, Julian and Schr{\"o}der-Preikschat, Wolfgang and H{\"o}nig, Timo},
-  booktitle={Proceedings of the 14th European Workshop on Systems Security},
-  pages={8--14},
+  booktitle={EuroSec},
   year={2021}
 }

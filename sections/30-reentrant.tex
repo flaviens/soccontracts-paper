@@ -118,13 +118,14 @@ In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indee
 Equation~\ref{dict:contract_cache_interrupt} models data-dependent interrupts and timing, which might occur, for example, if some peripheral can be controlled through memory-mapped registers such as an interrupt controller~\cite{riscv_plic_spec_1_0_0}.
 
 \para{Conditional refinements}
+\fls{TODO ensure to reference section III.B.}
 Equation~\ref{dict:contract_cache_interrupt} implies that writing tainted, i.e., secret, data to memory with a specific address that is not tainted might always trigger an interrupt or affect the timing of the memory response. In some settings, this might be true only for specific address ranges where peripherals are mapped, but parts of the memory address range can typically be used in a data-independent timing.
 \fls{Be more concrete here.}
 To refine this contract, we introduce address-dependent contracts as in Equation~\ref{dict:contract_cache_interrupt_addressdependent}, where the right-hand side of the implication depends on the memory address set \texttt{periph\_range}, which is a fixed set of addresses.
 % Note that the contract could also be refined by making the interrupts dependent on the written data.
 % For example, an interrupt might never be triggered, whatever the address, if the written data is zero, for the class of platforms of interest for the CPU integrator.
 % In verification, such constraints can be expressed as data-independent timing assuming that the CPU does not write to memory addresses in \texttt{periph\_range} with tainted data.
-For example, this can be achieved with RISC-V Physical Memory Protection (PMP)~\cite{riscv_privileged} in a setting where the most privileged execution mode does not access secret data and protects the \texttt{periph\_range} address range from being accessed from lower privileges, in the philosophy of trusted execution environments~\cite{lee2019keystone,costan2016sanctum,mckeen2013intel,arm2009trustzone,nasahl2020hector,mcgillion2015opentee,lebedev2018sanctorum,schneider2022sok,bourgeat2018mi6,brasser2022tcx}.
+For example, this can be achieved with RISC-V Physical Memory Protection (PMP) in a setting where the most privileged execution mode does not access secret data and protects the \texttt{periph\_range} address range from being accessed from lower privileges, in the philosophy of trusted execution environments~\cite{lee2019keystone,costan2016sanctum,arm2009trustzone,mcgillion2015opentee,schneider2022sok,bourgeat2018mi6,brasser2022tcx}.
 
 % \fls{TODO Say that we will have a reference contract later for the end-to-end attack.}
 % \fls{TODO Say the right-hand side can be anytime after, and for any number of time. Maybe write this as an LTL formula.}
