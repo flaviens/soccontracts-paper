@@ -2,6 +2,7 @@
 % !TeX spellcheck = en_US
 
 \fls{Mention the bug of fastpath.}
+\fls{Harmonize Figure vs. Fig.}
 
 Timing side-channel attacks exploit variations in execution time to leak secrets through measurable side effects.
 By carefully choreographing benign-looking instruction sequences, an attacker can steer microarchitectural state, such as caches, TLBs, execution ports, or branch predictors to make secret-dependent effects externally observable.
@@ -36,5 +37,6 @@ In summary, our contributions in this paper are:
     \item We apply instrumentations corresponding to various platforms to the RISC-V Sodor CPU to capture platform-specific timing information and show that these platforms can introduce unique timing channels that may not be present in isolated CPU verification and that would be missed by some existing verification techniques.
 \end{itemize}
 
-\vspace*{0.5em}
+% \vspace*{0.5em}
+\para{Open sourcing}
 All our experiments can be found at: \url{https://placeholder/} 

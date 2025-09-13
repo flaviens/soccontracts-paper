@@ -38,38 +38,32 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
 \begin{table}[t]
     \vspace*{1.2em}
     \centering
-    \caption{Verification results for the original Sodor (SO) and Kronos (KO), and for \PICI-instrumented (Equation~\ref{dict:contract_cache_nointerrupt}) Sodor (SP) and Kronos (KP). Results are "pass" if all memory instructions are considered safe with regard to all their operands (and in particular with regard to the address when it comes to loads and stores).
+    \caption{Verification results for the original (O) Sodor and Kronos, and for \PICI-instrumented (P) Sodor and Kronos for the contract C3. Results are "pass" if all memory instructions are considered safe with regard to all their operands (and in particular with regard to the address when it comes to loads and stores).
     Time indicates time to obtain a proof for a subset of instructions that excludes memory instructions if they are shown to be non-constant-time.
-    The time shown for \ucfi is the mean time to prove a instruction.
-    \textcolor{red}{TODO Make double-columns to horizontalize the table.}
-    }
+    The time shown for \ucfi is the mean time to prove an instruction.}
     \vspace*{-.4em}
     \small
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \rowcolor{gray!20} % Color for the table header
-        & \textbf{\ucfi} & \textbf{VeloCT} \\
+        \rowcolor{gray!20}
+        & \multicolumn{2}{c|}{\textbf{\ucfi}} & \multicolumn{2}{c|}{\textbf{VeloCT}} \\
         \hline
-        Time  (SO) & 8\,min & 1\,min \\
+        \rowcolor{gray!10}
+        & \textbf{Sodor} & \textbf{Kronos} & \textbf{Sodor} & \textbf{Kronos} \\
         \hline
-        Result (SO) & Pass \gcheck & Pass \gcheck \\
+        Time (O) & 8\,min & 31\,min & 1\,min & 1\,min \\
         \hline
-        Time (SP)  & 10\,min & 1\,min \\
+        Result (O) & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} \\
         \hline
-        Result (SP) & Fail \rcross & Fail \rcross \\
+        Time (P) & 10\,min & 31\,min & 1\,min & 1\,min \\
         \hline
-        Time  (KO) & 31\,min & 1\,min \\
-        \hline
-        Result (KO) & Pass \gcheck & Pass \gcheck \\
-        \hline
-        Time (KP)  & 31\,min & 1\,min \\
-        \hline
-        Result (KP) & Fail \rcross & Fail \rcross \\
+        Result (P) & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} \\
         \hline
     \end{tabular}
     \vspace*{-.4em}
     \label{tab:verif_results_simple_soc}
 \end{table}
+
 
 
 \subsection{Soundness improvement with \PICI}
@@ -118,14 +112,13 @@ As a result, the \PICI automatically transforms the verification of a CPU in iso
         \rowcolor{gray!20} % Color for the table header
         \textbf{Contract} & \texttt{nocache} & \texttt{cache} & \texttt{interrupt} \\
         \hline
-        A & Pass \gcheck & Fail \rcross & Fail \rcross \\
+        A & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} \\
         \hline
-        B & Pass \gcheck & Pass \gcheck & Fail \rcross \\
+        B & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} \\
         \hline
-        C & Pass \gcheck & Pass \gcheck & Pass \gcheck \\
+        C & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} \\
         \hline
-        D & Pass \gcheck & Pass \gcheck & Fail \rcross \\
-        \hline
+        D & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} \\       \hline
     \end{tabular}
     \label{tab:verif_platform_compliance_results}
 \end{table}

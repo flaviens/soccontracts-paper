@@ -1,0 +1,91 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="wbKx4W4MyXmvGZ7B1Mcj">
+    <mxGraphModel dx="2294" dy="1105" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-34" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;strokeColor=#7C7C7C;" parent="1" vertex="1">
+          <mxGeometry x="-29" y="38" width="389" height="172" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-1" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;$$\text{req} \rightarrow \lozenge \{\text{gnt}, \text{rdata}\}$$&lt;/span&gt;&lt;/div&gt;&lt;svg style=&quot;vertical-align: 0px;&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 12 12&quot; role=&quot;img&quot; height=&quot;0.027ex&quot; width=&quot;0.027ex&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1,-1)&quot; stroke-width=&quot;0&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot;&gt;&lt;g data-mml-node=&quot;math&quot;&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-7" y="50" width="150" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-3" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;$$\text{we} \rightarrow \lozenge \{\text{rdata}\}$$&lt;/span&gt;&lt;/div&gt;&lt;svg style=&quot;vertical-align: 0px;&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 12 12&quot; role=&quot;img&quot; height=&quot;0.027ex&quot; width=&quot;0.027ex&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1,-1)&quot; stroke-width=&quot;0&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot;&gt;&lt;g data-mml-node=&quot;math&quot;&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-19" y="66" width="150" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-4" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;$$\text{addr} \rightarrow \lozenge \{\text{rdata}\}$$&lt;/span&gt;&lt;/div&gt;&lt;svg style=&quot;vertical-align: 0px;&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 12 12&quot; role=&quot;img&quot; height=&quot;0.027ex&quot; width=&quot;0.027ex&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1,-1)&quot; stroke-width=&quot;0&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot;&gt;&lt;g data-mml-node=&quot;math&quot;&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-25" y="82" width="150" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-5" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;$$\text{wdata} \rightarrow \lozenge \{\text{rdata}\}$$&lt;/span&gt;&lt;/div&gt;&lt;svg style=&quot;vertical-align: 0px;&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 12 12&quot; role=&quot;img&quot; height=&quot;0.027ex&quot; width=&quot;0.027ex&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1,-1)&quot; stroke-width=&quot;0&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot;&gt;&lt;g data-mml-node=&quot;math&quot;&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-29" y="98" width="150" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-6" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;$$\text{req} \rightarrow \lozenge \{\text{gnt}, \text{rdata}\}$$&lt;/span&gt;&lt;/div&gt;&lt;svg style=&quot;vertical-align: 0px;&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 12 12&quot; role=&quot;img&quot; height=&quot;0.027ex&quot; width=&quot;0.027ex&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1,-1)&quot; stroke-width=&quot;0&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot;&gt;&lt;g data-mml-node=&quot;math&quot;&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-3" y="139" width="150" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-12" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{we} \rightarrow \lozenge \{\text{gnt}, \text{rdata}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-11" y="143" width="170" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-13" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{addr} \rightarrow \lozenge \{\text{gnt}, \text{rdata}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-24" y="161" width="184" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-14" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{wdata} \rightarrow \lozenge \{\text{rdata}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="-45" y="174" width="190" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-15" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;$$\text{req} \rightarrow \lozenge \{\text{gnt}, \text{rdata}, \text{int}\}$$&lt;/span&gt;&lt;/div&gt;&lt;svg style=&quot;vertical-align: 0px;&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 12 12&quot; role=&quot;img&quot; height=&quot;0.027ex&quot; width=&quot;0.027ex&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1,-1)&quot; stroke-width=&quot;0&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot;&gt;&lt;g data-mml-node=&quot;math&quot;&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="170" y="50" width="150" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-16" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{we} \rightarrow \lozenge \{\text{gnt}, \text{rdata}, \text{int}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="161" y="54" width="170" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-17" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{addr} \rightarrow \lozenge \{\text{gnt}, \text{rdata}, \text{int}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="148" y="72" width="184" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-18" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{wdata} \rightarrow \lozenge \{\text{gnt}, \text{rdata}, \text{int}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="140" y="85" width="190" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-19" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;$$\text{req} \rightarrow \lozenge \{\text{gnt}, \text{rdata}, \text{int}\}$$&lt;/span&gt;&lt;/div&gt;&lt;svg style=&quot;vertical-align: 0px;&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; viewBox=&quot;0 0 12 12&quot; role=&quot;img&quot; height=&quot;0.027ex&quot; width=&quot;0.027ex&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;defs&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1,-1)&quot; stroke-width=&quot;0&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot;&gt;&lt;g data-mml-node=&quot;math&quot;&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="169" y="124" width="150" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-20" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{we} \rightarrow \lozenge \{\text{gnt}, \text{rdata}, \text{int}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="160" y="128" width="170" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-21" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{addr} \rightarrow \lozenge \{\text{gnt}, \text{rdata}, \text{int}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="147" y="146" width="184" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-22" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{wdata} \rightarrow \lozenge \{\text{gnt},&lt;br&gt;$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="105" y="159" width="190" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-24" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{rdata if addr} \in \text{periph_range,}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="171" y="174" width="190" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-26" value="&lt;span style=&quot;text-align: left;&quot;&gt;$$\text{int if addr} \in \text{periph_range}\}$$&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="167" y="189" width="190" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-32" value="" style="endArrow=none;dashed=1;html=1;rounded=0;strokeColor=#7C7C7C;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="144" y="207" as="sourcePoint" />
+            <mxPoint x="144" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3l_xkGtYVz6DhgKAWS7j-33" value="" style="endArrow=none;dashed=1;html=1;rounded=0;strokeColor=#7C7C7C;entryX=0.001;entryY=0.419;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.001;exitY=0.419;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="3l_xkGtYVz6DhgKAWS7j-34" target="3l_xkGtYVz6DhgKAWS7j-34" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="347" y="110" as="sourcePoint" />
+            <mxPoint x="-25" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eKftTvHDBTNzPtZPAFcp-2" value="&lt;font style=&quot;color: rgb(89, 89, 89);&quot;&gt;$$(\text{C1})$$&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-29" y="54" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="eKftTvHDBTNzPtZPAFcp-10" value="&lt;font style=&quot;color: rgb(89, 89, 89);&quot;&gt;$$(\text{C2})$$&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-29" y="128" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="eKftTvHDBTNzPtZPAFcp-11" value="&lt;font style=&quot;color: rgb(89, 89, 89);&quot;&gt;$$(\text{C4})$$&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="329" y="129" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="eKftTvHDBTNzPtZPAFcp-13" value="&lt;font style=&quot;color: rgb(89, 89, 89);&quot;&gt;$$(\text{C3})$$&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="329" y="56" width="30" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

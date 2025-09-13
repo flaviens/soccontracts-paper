@@ -94,20 +94,20 @@ The output signals of a RISC-V CPU are all through memory interfaces, which are 
 % \fls{TODO Maybe change all "CPU"'s with "CPU core"}
 Data signals transport the data to be read or written to or from the memory.
 Control signals transport the information about the memory transaction, such as the memory address, handshake signals, and depending on the memory bus protocol (e.g., AMBA AXI~\cite{arm_amba} or TileLink~\cite{tilelink_spec}), further control signals such as the type of transaction and the size of the data to be read or written.
-Input signals of a RISC-V CPU can be more diverse.
-They include memory input data and control signals, interrupt lines, and various other control signals such as clock gating signals.
+Input signals of a RISC-V CPU can be more diverse, including memory input data and control signals, interrupt lines, and various other control signals such as clock gating signals.
 
 \para{Platform timing contracts}
-The goal of platform timing contracts is to ensure that state elements that capture timing differences, such as the commit signal or a microarchitectural program counter, \emph{are not fully reentrant} in the CPU.
+Platform timing contracts aim to ensure that state elements that capture timing differences (e.g., a commit signal or a microarchitectural program counter) \emph{are not fully reentrant} in the CPU.
 To ensure this, a platform timing contract specifies an upper bound of the information flows between the output signals of the CPU and its input signals.
-We express a platform timing contract as a list of rules, listed per output signal of the CPU.
-In Section~\ref{sec:instrumentation}, we introduce synthesizable constructs that create paths between secret sources and sinks, to ensure that the sets $P^s_v$ are not empty for these sinks, preventing these sinks from being fully-reentrant.
+We express a platform timing contract as a list of rules, listed per CPU output signal.
+% In Section~\ref{sec:instrumentation}, we introduce synthesizable constructs that create paths between secret sources and sinks, to ensure that the sets $P^s_v$ are not empty for these sinks, preventing these sinks from being fully-reentrant.
 % \textcolor{red}{TODO Continuer ici.}
 
 
 \para{Example contracts}
-We provide some example contracts for a RISC-V CPU with a Von Neumann architecture, where we model the memory interface as an outbound address bus (\texttt{addr}), an inbound and an outbound memory data port (respectively \texttt{rdata} and \texttt{wdata}), and a simple valid-ready handshake protocol (inbound \texttt{resp} and outbound \texttt{req}), similar to the \texttt{req} and \texttt{gnt} handshake signals in the Hardware Processing Engines (HWPE) 2.0 interface protocol~\cite{pulpHWPEMem}.
-Equation~\ref{dict:contract_nocache} defines a simple integration contract for a platform with ideal memory that responds with a constant timing (i.e., that is address-independent).
+Fig.~\ref{fig:contract_equations} provides four example contracts for a RISC-V CPU with a Von Neumann architecture.
+We model the memory interface as an outbound address bus (\texttt{addr}), an inbound and an outbound memory data port (respectively \texttt{rdata} and \texttt{wdata}), and a simple valid-ready handshake protocol (inbound \texttt{resp} and outbound \texttt{req}), similar to the \texttt{req} and \texttt{gnt} handshake signals in the Hardware Processing Engines (HWPE) 2.0 interface protocol~\cite{pulpHWPEMem}.
+Fig.~\ref{fig:contract_equations}'s contract C1 defines a simple integration contract for a platform with ideal memory that responds with a constant timing (i.e., that is address-independent).
 A change in the memory transaction control signals from the CPU can only change the returned value.
 Only the request signal (\texttt{req}) can affect the existence, and hence the timing, of a memory response.
 % Indeed, a change in the address of a read, for example, might read from a memory cell that contains a different value, and a change, for example in the timing of some request signal will affect the timing of the memory response, and hence the memory read data at some point in time.
@@ -119,6 +119,7 @@ Equation~\ref{dict:contract_cache_interrupt} models data-dependent interrupts an
 
 \para{Conditional refinements}
 Equation~\ref{dict:contract_cache_interrupt} implies that writing tainted, i.e., secret, data to memory with a specific address that is not tainted might always trigger an interrupt or affect the timing of the memory response. In some settings, this might be true only for specific address ranges where peripherals are mapped, but parts of the memory address range can typically be used in a data-independent timing.
+\fls{Be more concrete here.}
 To refine this contract, we introduce address-dependent contracts as in Equation~\ref{dict:contract_cache_interrupt_addressdependent}, where the right-hand side of the implication depends on the memory address set \texttt{periph\_range}, which is a fixed set of addresses.
 % Note that the contract could also be refined by making the interrupts dependent on the written data.
 % For example, an interrupt might never be triggered, whatever the address, if the written data is zero, for the class of platforms of interest for the CPU integrator.
@@ -128,49 +129,60 @@ For example, this can be achieved with RISC-V Physical Memory Protection (PMP)~\
 % \fls{TODO Say that we will have a reference contract later for the end-to-end attack.}
 % \fls{TODO Say the right-hand side can be anytime after, and for any number of time. Maybe write this as an LTL formula.}
 
-\begin{equation}
-\label{dict:contract_nocache}
-\begin{array}{rcl}
-\text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
-\text{we} & \rightarrow & \lozenge \{\text{rdata}\} \\
-\text{addr} & \rightarrow & \lozenge \{ \text{rdata}\} \\
-\text{wdata} & \rightarrow & \lozenge \{ \text{rdata} \} \\
-\end{array}
-\end{equation}
 
-\begin{equation}
-\label{dict:contract_cache_nointerrupt}
-\begin{array}{rcl}
-\text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
-\text{we} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
-\text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
-\text{wdata} & \rightarrow & \lozenge \{ \text{rdata} \} \\
-\end{array}
-\end{equation}
+\begin{figure}
+    \begin{center}
+    \includegraphics[width=\columnwidth]{figures/contract_equations/contract_equations.pdf}
+    \end{center}
+    \vspace{-1.8em}
+    \caption{Example platform contracts.}
+    \label{fig:contract_equations}
+    \vspace*{-1.5em} 
+\end{figure}
 
-\begin{equation}
-\label{dict:contract_cache_interrupt}
-\begin{array}{rcl}
-\text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
-\text{we} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
-\text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
-\text{wdata} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt} \} \\
-\end{array}
-\end{equation}
+% \begin{equation}
+% \label{dict:contract_nocache}
+% \begin{array}{rcl}
+% \text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+% \text{we} & \rightarrow & \lozenge \{\text{rdata}\} \\
+% \text{addr} & \rightarrow & \lozenge \{ \text{rdata}\} \\
+% \text{wdata} & \rightarrow & \lozenge \{ \text{rdata} \} \\
+% \end{array}
+% \end{equation}
 
-\begin{equation}
-\label{dict:contract_cache_interrupt_addressdependent}
-\begin{array}{rcl}
-\text{req}  & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
-\text{we}  & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
-\text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
-% \text{wdata} & \rightarrow & \lozenge \{ \text{rdata}, \text{interrupt} \} \\
-\text{wdata} & \rightarrow & \lozenge \{ \text{rdata}, \\
-& & \text{gnt if addr in periph\_range} \\
-& & \text{interrupt if addr in periph\_range} \} \\
+% \begin{equation}
+% \label{dict:contract_cache_nointerrupt}
+% \begin{array}{rcl}
+% \text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+% \text{we} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+% \text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}\} \\
+% \text{wdata} & \rightarrow & \lozenge \{ \text{rdata} \} \\
+% \end{array}
+% \end{equation}
 
-\end{array}
-\end{equation}
+% \begin{equation}
+% \label{dict:contract_cache_interrupt}
+% \begin{array}{rcl}
+% \text{req} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+% \text{we} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+% \text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+% \text{wdata} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt} \} \\
+% \end{array}
+% \end{equation}
+
+% \begin{equation}
+% \label{dict:contract_cache_interrupt_addressdependent}
+% \begin{array}{rcl}
+% \text{req}  & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+% \text{we}  & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+% \text{addr} & \rightarrow & \lozenge \{ \text{gnt}, \text{rdata}, \text{interrupt}\} \\
+% % \text{wdata} & \rightarrow & \lozenge \{ \text{rdata}, \text{interrupt} \} \\
+% \text{wdata} & \rightarrow & \lozenge \{ \text{rdata}, \\
+% & & \text{gnt if addr in periph\_range} \\
+% & & \text{interrupt if addr in periph\_range} \} \\
+
+% \end{array}
+% \end{equation}
 
 \para{Ordering of \pics}
 Like for sinks, we can define a partial ordering of \pics.

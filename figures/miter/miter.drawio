@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
   <diagram name="Page-1" id="_cB0cUbqZ04Pa6sfLyFr">
-    <mxGraphModel dx="171" dy="129" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="1" shadow="0">
+    <mxGraphModel dx="244" dy="184" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="1" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -73,14 +73,14 @@
         <mxCell id="9GydCIYuXC8IdIWW7Miu-12" value="&lt;font&gt;DUT&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="274" y="210" width="60" height="13" as="geometry" />
         </mxCell>
-        <mxCell id="9GydCIYuXC8IdIWW7Miu-13" value="$$p_2$$" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="288" y="229" width="20" height="22" as="geometry" />
+        <mxCell id="9GydCIYuXC8IdIWW7Miu-13" value="$$s_2$$" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="288" y="231" width="20" height="18" as="geometry" />
         </mxCell>
-        <mxCell id="9GydCIYuXC8IdIWW7Miu-14" value="$$p_1$$" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="215" y="229" width="20" height="22" as="geometry" />
+        <mxCell id="9GydCIYuXC8IdIWW7Miu-14" value="$$s_1$$" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="215" y="231" width="20" height="18" as="geometry" />
         </mxCell>
-        <mxCell id="9GydCIYuXC8IdIWW7Miu-15" value="$$s$$" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="253" y="235" width="20" height="13" as="geometry" />
+        <mxCell id="9GydCIYuXC8IdIWW7Miu-15" value="$$p$$" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="251" y="235" width="20" height="13" as="geometry" />
         </mxCell>
         <mxCell id="9GydCIYuXC8IdIWW7Miu-16" value="$$y_1$$" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="212" y="193" width="20" height="13" as="geometry" />
