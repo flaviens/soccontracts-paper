@@ -22,9 +22,9 @@ Other modes, such as the architectural observer, reveal even more detail by also
 Such observer modes depend on platform-level features (e.g., SoC components), yet many verification techniques overlook these modes or cannot flexibly capture platform-induced channels.
 
 \para{Platform timing contracts}
-We introduce platform timing contracts to extend the idea of hardware-software contracts to encompass the broader system context in which a CPU operates.
-They aim to capture the timing behavior of the entire platform, including interactions with other components such as memory controllers, I/O devices, and interconnects.
-By considering these interactions, platform timing contracts can provide a more comprehensive understanding of potential timing channels and their implications for security.
+We introduce platform timing contracts to extend hardware-software contracts to the broader system context in which a CPU operates.
+These contracts aim to capture the timing behavior of the entire platform, including interactions with other components such as memory controllers, I/O devices, and interconnects.
+By considering these interactions, platform timing contracts can provide a more comprehensive understanding of potential timing channels and the resulting security implications.
 To verify the confidentiality guarantees of a CPU integrated into a specific platform using existing techniques that verify a CPU in isolation, we introduce an automatic instrumentation that captures the relevant platform-specific timing information while retaining compatibility with all existing hardware-software contract verification techniques.
 
 We apply the instrumentation corresponding to each platform to the RISC-V Sodor CPU, which is commonly used in constant-time verification benchmarks.
@@ -33,7 +33,7 @@ Not only does the verification time not increase significantly when applying the
 In summary, our contributions in this paper are:
 \begin{itemize}
     \item We introduce \pics that summarize platform-specific timing behaviors.
-    \item We implement an open-source lightweight CPU instrumentation that accounts for all platform-induced timing side-channels.
+    \item We implement an open-source lightweight CPU instrumentation that accounts for all platform-induced timing side-channels for a given \pic.
     \item We apply instrumentations corresponding to various platforms to the RISC-V Sodor CPU to capture platform-specific timing information and show that these platforms can introduce unique timing channels that may not be present in isolated CPU verification and that would be missed by some existing verification techniques.
 \end{itemize}
 
