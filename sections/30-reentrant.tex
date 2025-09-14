@@ -42,6 +42,7 @@ These results underline that while constant-time verification techniques typical
 Therefore, the integration of the CPU into a larger system can introduce new timing channels that were not present in isolation and that are not discovered by existing constant-time verification techniques.
 
 \subsection{Reentrant flows}
+\label{sec:reentrant:reentrant}
 
 We now describe and formalize reentrant information flows, which are at the core of the timing channels that can be introduced by platform integration.
 
@@ -118,20 +119,17 @@ The diamond $\lozenge$ underlines that the right-hand side of the implication ca
 Contract C2 adds timing dependence on the memory address, which is typical of structures like caches.
 In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indeed, a change in the address of a read, for example, can change a cache miss into a cache hit, changing the timing of the response, and hence its value at some point in time, including the \texttt{gmt} control signal and the \texttt{rdata} data signals.
 Contract C3 models data-dependent interrupts (\texttt{int}) and timing.
-That is, the \emph{reentrant secret propagation paths} (see Section~\ref{sec:reentrant}) all go through a specific set of memory addresses only.
+That is, the \emph{reentrant secret propagation paths} (see Section~\ref{sec:reentrant:reentrant}) all go through a specific set of memory addresses only.
 For example, some peripheral might be controlled through memory-mapped registers such as an interrupt controller~\cite{riscv_plic_spec_1_0_0}.
 
 \para{Conditional refinements}
-\fls{TODO ensure to reference section III.B.}
-Contract C3 implies that writing tainted, i.e., secret, data to memory with a specific address that is not tainted might always trigger an interrupt or affect the timing of the memory response.
-\fls{TODO Fix this sentence.}
-In some settings, this might be true only for specific address ranges where peripherals are mapped, but parts of the memory address range can typically be used in a data-independent timing.
-\fls{Be more concrete here.}
-To refine this contract, we introduce address-dependent contracts as in Contract C4, where the right-hand side of the implication depends on the memory address set \texttt{periph\_range}, which is a fixed set of addresses.
+Contract C3 implies that for a fixed address, changes in the data written to memory can eventually affect the existence of an interrupt or affect the timing of the memory response.
+For some platforms, this might only hold for specific address ranges where peripherals are mapped, while parts of the memory address range can be used in a data-independent timing, for example because it is mapped to memory.
+Hence, we introduce address-dependent contracts as in Contract C4, where the right-hand side of the implication depends on the memory address set \texttt{periph\_range}, which is a fixed set of addresses.
 % Note that the contract could also be refined by making the interrupts dependent on the written data.
 % For example, an interrupt might never be triggered, whatever the address, if the written data is zero, for the class of platforms of interest for the CPU integrator.
 % In verification, such constraints can be expressed as data-independent timing assuming that the CPU does not write to memory addresses in \texttt{periph\_range} with tainted data.
-For example, this can be achieved with RISC-V Physical Memory Protection (PMP) in a setting where the most privileged execution mode does not access secret data and protects the \texttt{periph\_range} address range from being accessed from lower privileges, in the philosophy of trusted execution environments~\cite{lee2019keystone,costan2016sanctum,arm2009trustzone,mcgillion2015opentee,schneider2022sok,bourgeat2018mi6,brasser2022tcx}.
+For example, this can be achieved with RISC-V Physical Memory Protection (PMP) in a setting where the most privileged execution mode does not access secret data and protects the \texttt{periph\_range} address range from being accessed from lower privileges, in the philosophy of trusted execution environments~\cite{lee2019keystone,costan2016sanctum,arm2009trustzone,mcgillion2015opentee,bourgeat2018mi6,brasser2022tcx}.
 
 % \fls{TODO Say that we will have a reference contract later for the end-to-end attack.}
 % \fls{TODO Say the right-hand side can be anytime after, and for any number of time. Maybe write this as an LTL formula.}
@@ -142,7 +140,7 @@ For example, this can be achieved with RISC-V Physical Memory Protection (PMP) i
     \includegraphics[width=\columnwidth]{figures/contract_equations/contract_equations.pdf}
     \end{center}
     \vspace{-1.8em}
-    \caption{Example platform contracts.}
+    \caption{Example platform contracts. The syntax ``$\text{output} \rightarrow \lozenge \{ \text{inputs} \}$'' indicates that taint can eventually flow from this output to these inputs.}
     \label{fig:contract_equations}
     \vspace*{-1.5em} 
 \end{figure}
@@ -192,7 +190,7 @@ For example, this can be achieved with RISC-V Physical Memory Protection (PMP) i
 % \end{equation}
 
 \para{Ordering of \pics}
-Like for sinks, we can define a partial ordering of \pics.
+Like for hardware-software contracts~\cite{guarnieri2021hardware}, we can define a partial ordering of \pics.
 We say that a contract A is (inclusively) stronger than a contract B if for every output of the CPU (i.e., the left-hand side of the arrow in the contract), the set of possible CPU inputs tainted by this output in contract A is a subset of the set of possible CPU inputs tainted by this output in contract B.
 Said otherwise, contract A is stronger than contract B if it allows for fewer possible information flows.
 For example, Contract C4 is stronger than Contract C3, and Contract C2 is stronger than Contract C3.
