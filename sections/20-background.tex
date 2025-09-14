@@ -17,6 +17,7 @@ In this paper, we use the words SoC, system and platform interchangeably to refe
 The communication between these components is typically managed through standardized bus protocols, such as AMBA~\cite{arm_amba} or TileLink~\cite{tilelink_spec}.
 The bounds of components are not always clear-cut.
 For example, Fig.~\ref{fig:verifscopecache} shows that caches can be considered part of the CPU or of the rest of the platform.
+For a hardware component, we refer to its \emph{input signals} as the inbound wires, and its \emph{inputs} as the values carried by those wires, and similarly for outputs.
 
 \subsection{Timing side-channels}
 
@@ -34,7 +35,7 @@ Constant-time programming techniques, such as not using secret data as array ind
     \includegraphics[width=0.5\columnwidth]{figures/glift/glift.pdf}
     \end{center}
     \vspace*{-1em}
-    \caption{\label{fig:glift} Taint tracking at gate level~\cite{tiwari2009complete}. Left: original circuit. Right: Added instrumentation for taint tracking. The original inputs are $a$ and $b$. The taint bits corresponding to $a$ and $b$ are respectively $a^t$ and $b^t$. The output taint bit $y^t$ indicates whether the output is tainted, i.e., influenced by the tainted inputs.}
+    \caption{\label{fig:glift} Taint tracking at gate level~\cite{tiwari2009complete}. Left: original circuit. Right: Added instrumentation for taint tracking. The original input signals are $a$ and $b$. The taint bits corresponding to $a$ and $b$ are respectively $a^t$ and $b^t$. The output taint bit $y^t$ indicates whether the output is tainted, i.e., influenced by the tainted inputs.}
     \vspace*{-1em}
 \end{figure}
 
