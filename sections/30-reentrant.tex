@@ -113,15 +113,19 @@ Only the request signal (\texttt{req}) can affect the existence, and hence the t
 % Indeed, a change in the address of a read, for example, might read from a memory cell that contains a different value, and a change, for example in the timing of some request signal will affect the timing of the memory response, and hence the memory read data at some point in time.
 The diamond $\lozenge$ underlines that the right-hand side of the implication can happen at any time and for any number of times after the left-hand side.
 % \fls{Maybe I should explain more intuitions like why req and addr actually have exactly the same effect.}
-Equation~\ref{dict:contract_cache_nointerrupt} adds timing dependence on the memory address, which is typical of structures like caches.
-In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indeed, a change in the address of a read, for example, can change a cache miss into a cache hit, changing the timing, and hence the value at some point in time, of the response, including the \texttt{gmt} control signal and the \texttt{rdata} data signals.
-Equation~\ref{dict:contract_cache_interrupt} models data-dependent interrupts and timing, which might occur, for example, if some peripheral can be controlled through memory-mapped registers such as an interrupt controller~\cite{riscv_plic_spec_1_0_0}.
+Contract C2 adds timing dependence on the memory address, which is typical of structures like caches.
+In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indeed, a change in the address of a read, for example, can change a cache miss into a cache hit, changing the timing of the response, and hence its value at some point in time, including the \texttt{gmt} control signal and the \texttt{rdata} data signals.
+Contract C3 models data-dependent interrupts (\texttt{int}) and timing.
+That is, the \emph{reentrant secret propagation paths} (see Section~\ref{sec:reentrant}) all go through a specific set of memory addresses only.
+For example, some peripheral might be controlled through memory-mapped registers such as an interrupt controller~\cite{riscv_plic_spec_1_0_0}.
 
 \para{Conditional refinements}
 \fls{TODO ensure to reference section III.B.}
-Equation~\ref{dict:contract_cache_interrupt} implies that writing tainted, i.e., secret, data to memory with a specific address that is not tainted might always trigger an interrupt or affect the timing of the memory response. In some settings, this might be true only for specific address ranges where peripherals are mapped, but parts of the memory address range can typically be used in a data-independent timing.
+Contract C3 implies that writing tainted, i.e., secret, data to memory with a specific address that is not tainted might always trigger an interrupt or affect the timing of the memory response.
+\fls{TODO Fix this sentence.}
+In some settings, this might be true only for specific address ranges where peripherals are mapped, but parts of the memory address range can typically be used in a data-independent timing.
 \fls{Be more concrete here.}
-To refine this contract, we introduce address-dependent contracts as in Equation~\ref{dict:contract_cache_interrupt_addressdependent}, where the right-hand side of the implication depends on the memory address set \texttt{periph\_range}, which is a fixed set of addresses.
+To refine this contract, we introduce address-dependent contracts as in Contract C4, where the right-hand side of the implication depends on the memory address set \texttt{periph\_range}, which is a fixed set of addresses.
 % Note that the contract could also be refined by making the interrupts dependent on the written data.
 % For example, an interrupt might never be triggered, whatever the address, if the written data is zero, for the class of platforms of interest for the CPU integrator.
 % In verification, such constraints can be expressed as data-independent timing assuming that the CPU does not write to memory addresses in \texttt{periph\_range} with tainted data.
@@ -189,7 +193,7 @@ For example, this can be achieved with RISC-V Physical Memory Protection (PMP) i
 Like for sinks, we can define a partial ordering of \pics.
 We say that a contract A is (inclusively) stronger than a contract B if for every output of the CPU (i.e., the left-hand side of the arrow in the contract), the set of possible CPU inputs tainted by this output in contract A is a subset of the set of possible CPU inputs tainted by this output in contract B.
 Said otherwise, contract A is stronger than contract B if it allows for fewer possible information flows.
-For example, Equation~\ref{dict:contract_cache_interrupt_addressdependent} is stronger than Equation~\ref{dict:contract_cache_interrupt}, and Equation~\ref{dict:contract_cache_nointerrupt} is stronger than Equation~\ref{dict:contract_cache_interrupt}.
+For example, Contract C4 is stronger than Contract C3, and Contract C2 is stronger than Contract C3.
 A CPU that is verified to have a constant-time behavior with respect to a stronger \pic is also verified with respect to a weaker \pic.
 
 \begin{figure}
