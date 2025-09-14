@@ -6,7 +6,7 @@ Indeed, in the original CPU before IFT instrumentation or miter construct, the n
 Instead, the \PICI is applied to the construct that supports information flows, which is either a circuit with DIFT instrumentation, or a miter (see Section~\ref{subsec:ift}).
 
 \para{Sticky-one operator}
-Figure~\ref{fig:stickyone} introduces the sticky-one operator.
+Fig.~\ref{fig:stickyone} introduces the sticky-one operator.
 Its output sticks to 1 as soon as its input is 1, and only returns to zero when the system is reset.
 This operator will model the diamond $\lozenge$ operator in the instrumentations.
 
@@ -14,10 +14,10 @@ This operator will model the diamond $\lozenge$ operator in the instrumentations
 We first construct the \PICI for CPUs instrumented for DIFT~\cite{tiwari2009complete,solt2022cellift}.
 A contract information flow from a CPU output to a CPU input can be expressed as a wire between the two signals' corresponding taint signals, separated by a sticky-one operator to accommodate for information flows that might return later (i.e., the $\lozenge$ operator).
 When several CPU outputs have a contract information flow to a single CPU input, the corresponding taint signals can be combined using a logical OR operation, meaning that the input can be influenced by any of these outputs.
-The \PICI for the contract in Equation~\ref{dict:contract_cache_interrupt_addressdependent} is shown in Figure~\ref{fig:pic_instrum_taints} when relying on DIFT instrumentation.
+The \PICI for Contract C4 is shown in Fig.~\ref{fig:pic_instrum_taints} when relying on DIFT instrumentation.
 
 \para{\PICI for miter}
-To construct the \PICI for Equation~\ref{dict:contract_cache_interrupt_addressdependent} for a CPU that relies on a miter construct, the \PICI must ensure that the CPU inputs that are influenced by the CPU outputs are distinct between the two copies of the CPU.
+To construct the \PICI for Contract C4 for a CPU that relies on a miter construct, the \PICI must ensure that the CPU inputs that are influenced by the CPU outputs are distinct between the two copies of the CPU.
 This is achieved using \texttt{XOR} operations between the CPU outputs of the two copies.
 Ultimately, another \texttt{XOR} operation with the result of this difference is performed with the input, deciding whether for a given input, the two copies of the CPU will receive the same input, or one copy will receive a flipped input.
 Note that there is no conceptual difference between the \PICI for a miter construct and the \PICI for a DIFT instrumentation, yet the latter benefits from the abstraction built into the DIFT instrumentation, which allows for a more compact and arguably more intuitive \PICI.

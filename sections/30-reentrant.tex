@@ -1,8 +1,8 @@
-\subsection{Motivational example}
-
 In this section, we first provide a motivational example showing that the integration of a CPU into a system can introduce new timing channels that were not present in isolation.
 We then discuss and formalize reentrant information flows.
 Finally, we introduce platform integration contracts to capture these reentrant flows.
+
+\subsection{Motivational example}
 
 \begin{figure}[t]
     \begin{center}
@@ -10,33 +10,35 @@ Finally, we introduce platform integration contracts to capture these reentrant 
     \end{center}
     \vspace*{-1em}
     \caption{\label{fig:verifscopecache}
-        Example verification scopes, represented as dotted boxes. (a: cache excluded) the cache is considered part of the platform. (b: cache included) the cache is considered part of the CPU.
+        Example verification scopes, represented as dotted boxes. (a) Cache excluded: the cache is considered part of the platform. (b) Cache included: the cache is considered part of the CPU.
     }
     \vspace*{-1em}
 \end{figure}
 
 
 \para{Methodology (cache excluded)}
-Figure~\ref{fig:verifscopecache} (a) illustrates a small system in which a CPU is integrated in a platform that includes a cache and memory.
-We instantiate this system, using the Kronos CPU as a case study, and a direct-mapped cache.
+Fig.~\ref{fig:verifscopecache} (a) illustrates a small system that integrates a CPU, a cache and memory.
+We instantiate this system, using the Kronos~\cite{kronos} CPU as a case study, and a direct-mapped cache.
 We use the state-of-the-art VeloCT~\cite{dinesh2025h} tool to perform constant-time verification of the CPU, which is delimited by the dotted box.
-This tool verifies if only instructions of a given "safe instruction set" are executed, then the CPU runtime is independent of their operands.
+This tool verifies if only instructions of a given ``safe instruction set'' are executed, then the CPU runtime is independent of their operands.
 We consider memory instructions as part of the safe instruction set that should execute in constant-time, in addition to arithmetic RISC-V instructions such as \texttt{add}, \texttt{sub}, \texttt{xor}, etc.
 
 \para{Results (cache excluded)}
-The Kronos verification with VeloCT, which indicates that in isolation, the CPU is constant-time secure.
+The Kronos verification with VeloCT succeeds.
+This indicates that in isolation, the CPU is constant-time secure.
 In particular, this result suggests that the timing of any program made of arithmetic and memory instructions does not depend on the data that is processed, even if this data is used as memory addresses.
 
 \para{Methodology (cache included)}
-Figure~\ref{fig:verifscopecache} (b) illustrates a scenario similar to Figure~\ref{fig:verifscopecache} (a), but with the cache included in the verification scope, i.e., considered part of the CPU under verification.
+Fig.~\ref{fig:verifscopecache} (b) illustrates a scenario similar to Fig.~\ref{fig:verifscopecache} (a), but with the cache included in the verification scope, i.e., considered part of the CPU under verification.
 Except for this point, we use the same methodology as in the previous cache excluded case.
 
 \para{Results (cache included)}
-The Kronos verification with VeloCT, which indicates that this time, the CPU is not constant-time secure.
+The Kronos verification with VeloCT fails.
+This indicates that this time, the CPU is not constant-time secure.
 In particular, this result implies that the program execution timing can depend on secret information used as addresses of memory instructions.
 
 \para{Take-aways}
-These results underline that while constant-time verification techniques typically operate at the level of a CPU in isolation (the platform's RTL might not yet be finalized at the CPU verification time), they may not account for all the potential interactions with other components in the system, such as caches or memory.
+These results underline that while constant-time verification techniques typically operate at the level of a CPU in isolation (the entire platform specification might not yet be finalized at the CPU verification time), they may not account for all the potential interactions with other components in the system, such as caches or memory.
 Therefore, the integration of the CPU into a larger system can introduce new timing channels that were not present in isolation and that are not discovered by existing constant-time verification techniques.
 
 \subsection{Reentrant flows}
@@ -44,7 +46,7 @@ Therefore, the integration of the CPU into a larger system can introduce new tim
 We now describe and formalize reentrant information flows, which are at the core of the timing channels that can be introduced by platform integration.
 
 \para{Netlist graphs}
-We describe a digital hardware system (e.g., the one illustrated in Figure~\ref{fig:verifscopecache}), as a netlist $G = (V, E)$, where $V$ is the set of vertices representing logic gates such as AND, OR, NOT, flip-flops, adders, and $E$ is the set of directed wires between these vertices.
+We describe a digital hardware system (e.g., the one illustrated in Fig.~\ref{fig:verifscopecache}), as a netlist $G = (V, E)$, where $V$ is the set of vertices representing logic gates such as AND, OR, NOT, flip-flops, or adders, and $E$ is the set of directed wires between these vertices.
 We denote the subgraph of $G$ that corresponds to the CPU that is integrated in this system as $G_C = (V_C, E_C)$, where $V_C \subseteq V$ and $E_C \subseteq E$.
 In particular, for all edges $(u, v) \in E_C$, both $u$ and $v$ are vertices in $V_C$.
 We denote the complementary subgraph as $G_{P} = (V_{P}, E_{P})$, where $V_{P} = V \setminus V_C$ and $E_{P} = E \setminus E_C$, corresponding to the platform except the CPU that it integrates.
@@ -52,9 +54,9 @@ We denote the complementary subgraph as $G_{P} = (V_{P}, E_{P})$, where $V_{P} =
 \para{Constant-time programs \& secret data}
 For a given constant-time verification technique, let us denote by $\mathcal{P}$ the set of constant-time programs that are considered for verification.
 The elements of the set $\mathcal{P}$ are triples $\tau = (P, M_p, M_s)$, where $P$ is a constant-time program, $M_p$ is the set of public memory valuations, and $M_s$ is the set of secret values that the program may depend on.
-Specifically, this set $\mathcal{P}$ depends on the specific constant-time verification technique being used.
-For example, for ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., part of $\mathcal{P}$) if it contains no so-called "unsafe" instructions, i.e., instructions that can create an operand-dependent timing channel.
-For Tan et al.~\cite{tan2025contractshadowlogic}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., part of $\mathcal{P}$) if it ensures that the program's control flow and all memory accesses are independent of secret data.
+$\mathcal{P}$ depends on the specific constant-time verification technique being used.
+For example, for ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., belongs to $\mathcal{P}$) if it contains no so-called ``unsafe'' instructions, i.e., instructions that can create an operand-dependent timing channel.
+For Tan et al.~\cite{tan2025contractshadowlogic}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., belongs to $\mathcal{P}$) if it ensures that the program's control flow and all memory accesses are independent of secret data.
 The conditions for a program to be constant-time with respect to ConjunCT's and VeloCT's definition are stricter than those of Tan et al.~\cite{tan2025contractshadowlogic}, as the latter generally forbid branches, for instance.
 Inclusively more restrictive constraints imply an inclusively smaller set $\mathcal{P}$ of constant-time programs.
 
@@ -63,7 +65,7 @@ Constant-time verification techniques generally proceed by analyzing whether the
 For example, Tan et al.~\cite{tan2025contractshadowlogic}, LeaVe~\cite{wang2023specification}, ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h} monitor whether secret information can influence the commit signal, while \ucfi~\cite{ceesay2024mucfi} monitors whether secret information can influence a microarchitectural program counter structure.
 
 We define the \emph{valuation sequence} $\nu$ of a vertex.
-For a vertex $v \in V$ and a triple $\tau = (P, M_p, M_s)$, the valuation sequence $\nu_\tau(v)$ is the clock-accurate infinite sequence of valuations that the vertex takes during the execution of a program $P$ with respect to the memory valuations $M_p$ and $M_s$, starting from the CPU's and platform's reset state, assumed deterministic.
+For a vertex $v \in V$ and a triple $\tau = (P, M_p, M_s)$, the valuation sequence $\nu_\tau(v)$ is the clock-accurate infinite sequence of valuations that the vertex takes during the execution of a program $P$ with respect to the memory valuations $M_p$ and $M_s$, starting from the system's reset state, assumed deterministic.
 Note that we assume determinism for simplicity without loss of generality; to account for non-determinism, we could consider a set $\nu_\tau^{\text{non-det}}(v)$ of all possible valuation sequences instead of a single sequence $\nu_\tau(v)$, without change in the following reasoning.
 
 We denote by $V^s$ the set of vertices in $V$ whose valuation sequence can be influenced by secret information when the system executes a program written in constant-time with respect to the secret data.
@@ -80,8 +82,8 @@ Note that this $u$ also belongs to $V^s\setminus V'$ because all nodes in $p$ ar
 If all paths in $P^s_v$ are reentrant in $G'$, then we say that the vertex $v$ is \emph{fully reentrant} in $G'$.
 
 \para{Example}
-Let us consider again the system Figure~\ref{fig:verifscopecache} (a) where $\mathcal{P}$ describes programs where secret data, which is for example initially stored in a well-specified general-purpose register, can be used as the address of a memory instruction.
-Because the CPU itself does not contain caches or other components whose timing depends on memory addresses, for $v$ designating the commit signal (for LeaVe~\cite{wang2023specification}, Tan et al.~\cite{tan2025contractshadowlogic}, ConjunCT~\cite{dinesh2024conjunct} or VeloCT~\cite{dinesh2025h}), or a microarchitectural PC signal (\ucfi~\cite{ceesay2024mucfi}), $v$ is fully-reentrant in the CPU, if we consider $G$ being the whole platform, and $G'$ being the CPU.
+Let us consider again the system Fig.~\ref{fig:verifscopecache} (a) where $\mathcal{P}$ describes programs where secret data, which is for example initially stored in a well-specified memory area, can be used as the address of a memory instruction.
+Because the CPU itself does not contain caches or other components whose timing depends on memory addresses, for $v$ designating the commit signal (for LeaVe~\cite{wang2023specification}, Tan et al.~\cite{tan2025contractshadowlogic}, ConjunCT~\cite{dinesh2024conjunct} or VeloCT~\cite{dinesh2025h}), or a microarchitectural PC signal (\ucfi~\cite{ceesay2024mucfi}), $v$ is fully-reentrant in the CPU, for $G$ describing the whole platform, and $G'$ describing the CPU.
 
 \subsection{Contracts}
 
@@ -200,10 +202,10 @@ A CPU that is verified to have a constant-time behavior with respect to a strong
     \begin{center}
     \includegraphics[width=.7\columnwidth]{figures/stickyone/stickyone.pdf}
     \end{center}
-    \vspace*{-1em}
+    \vspace*{-1.4em}
     \caption{Sticky-one operator. The sticky-one is reset to zero (not illustrated in the figure) and sticks to 1 once it is set.}
     \label{fig:stickyone}
-    \vspace*{-.4em}
+    % \vspace*{-.4em}
 \end{figure}
 
 
@@ -222,8 +224,8 @@ A CPU that is verified to have a constant-time behavior with respect to a strong
     \begin{center}
     \includegraphics[width=0.9\columnwidth]{figures/picinstrum_miter/picinstrum_miter.pdf}
     \end{center}
-    \vspace*{-1em}
+    \vspace*{-1.8em}
     \caption{\Pici for a design whose information flows are tracked with a miter. }
     \label{fig:pic_instrum_miter}
-    \vspace*{-.4em}
+    % \vspace*{-.4em}
 \end{figure}

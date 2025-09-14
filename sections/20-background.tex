@@ -13,10 +13,10 @@ In this section, we provide background on SoC platforms, timing side-channels an
     \vspace*{-1em}
 \end{figure}
 
-In this paper, we use the words SoC and platform interchangeably to refer to the integrated circuit that integrates various components, including CPUs, memory, and peripherals, to provide a complete computing solution, as illustrated in Figure~\ref{fig:exampleplatform}.
-The communication between these components is typically managed through standardized bus protocols, such as AMBA~\cite{arm_amba} and TileLink~\cite{tilelink_spec}.
+In this paper, we use the words SoC, system and platform interchangeably to refer to the integrated circuit that integrates various components, including CPUs, memory, and peripherals, as illustrated in Fig.~\ref{fig:exampleplatform}.
+The communication between these components is typically managed through standardized bus protocols, such as AMBA~\cite{arm_amba} or TileLink~\cite{tilelink_spec}.
 The bounds of components are not always clear-cut.
-For example, caches can be considered part of the CPU or of the platform, as shown in Figure~\ref{fig:verifscopecache}.
+For example, Fig.~\ref{fig:verifscopecache} shows that caches can be considered part of the CPU or of the rest of the platform.
 
 \subsection{Timing side-channels}
 
@@ -50,23 +50,24 @@ Constant-time programming techniques, such as not using secret data as array ind
 Hardware information flows capture properties such as confidentiality and integrity~\cite{hu2021hardware}.
 They are typically captured using one of two techniques.
 The first technique is called dynamic information flow tracking (DIFT).
-It captures information flows by augmenting the hardware design under verification with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Figure~\ref{fig:glift}.
+It captures information flows by augmenting the hardware design under verification with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Fig.~\ref{fig:glift}.
 The second technique is called miter circuits.
-It captures information flows by comparing the outputs of two copies of the design under test, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Figure~\ref{fig:miter}.
+It captures information flows by comparing the outputs of two copies of the design under test, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Fig.~\ref{fig:miter}.
 
 \subsection{Hardware-software contracts}
 \label{subsec:hw-sw-contracts}
 
 \para{Contract definition}
 Hardware-software contracts~\cite{guarnieri2021hardware} split confidentiality responsibilities between the CPU and the software that it executes.
-For an initial microarchitectural state, a given program $\mathcal{P}$, and the contents of memory containing public information $M_p$ and secret information $M_s$, the contract fixes an execution mode and an observation mode.
+For an initial microarchitectural state, a given program $P$, and the contents of memory containing public information $M_p$ and secret information $M_s$, the contract specifies an execution mode and an observation mode.
 The \emph{execution mode} determines which instructions are executed (potentially transiently) and generate events.
-The \emph{observation mode} determines which of those events are exposed to an observer (possibly transiently), such as the addresses or values involved in memory accesses. Under these two choices, the CPU's behavior is summarized as a sequence of observable events known as a hardware trace~\cite{guarnieri2021hardware,oleksenko2022revizor}.
+The \emph{observation mode} determines which of those events are exposed to an observer (possibly transiently), such as the addresses or values involved in memory accesses.
+Under such a contract, the CPU's behavior is summarized as a sequence of observable events known as a hardware trace~\cite{guarnieri2021hardware,oleksenko2022revizor}.
 
 \para{Contract verification}
 Multiple independent verification efforts have been conducted to ensure that hardware-software contracts are upheld during program execution, in particular regarding constant-time behavior~\cite{dinesh2024conjunct,ceesay2024mucfi,guarnieri2021hardware,tan2025contractshadowlogic,dinesh2025h,hsiao2024rtl2mmupath,wang2023specification}.
 Most techniques consider a fixed contract~\cite{dinesh2024conjunct,ceesay2024mucfi,tan2025contractshadowlogic,dinesh2025h}.
-Others leverage custom, non-trivial technique-specific insights to verify a wider variety contracts~\cite{hsiao2024rtl2mmupath,wang2023specification} using the same technique.
+Others leverage custom, non-trivial technique-specific insights to verify a wider variety of contracts~\cite{hsiao2024rtl2mmupath,wang2023specification} using the same technique.
 
 \para{Discussion}
-All these techniques make assumptions about the platform in which the CPU is integrated, yet there exists no language that allows to formally express and verify them.
+These techniques make assumptions about the platform in which the CPU is integrated, yet there exists no language for formally expressing and verifying them.

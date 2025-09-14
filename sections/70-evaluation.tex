@@ -10,7 +10,7 @@ We use the 2-stage Sodor RISC-V CPU~\cite{sodor}, which is a simple CPU commonly
 % In particular, we show that \ucfi~\cite{ceesay2024mucfi} and VeloCT~\cite{dinesh2025h} call instructions safe, but these instructions are not safe when the CPU is integrated into a platform that contains a cache.
 % We execute \ucfi and VeloCT on the 2-stage Sodor RISC-V CPU~\cite{sodor} (commit \texttt{32d49f9}) and ask whether loads and stores are safe instructions, which the two techniques answer positively because they do not consider reentrant information flows.
 
-% We introduce a simple SoC architecture composed of a Sodor CPU, a set-associative cache and memory as depicted in Figure~\ref{fig:simple_soc}.
+% We introduce a simple SoC architecture composed of a Sodor CPU, a set-associative cache and memory as depicted in Fig.~\ref{fig:simple_soc}.
 % We mount a cache attack on the SoC, where we measure the timing differences in cache access patterns when secret data is used as an address, and we obtain different timing results depending on whether the secret data causes a hit or a miss in the cache.
 % As a result of this experiment, we indeed observe differences in the timing of the memory accesses between a hit and a miss using exclusively instructions that \ucfi and VeloCT considers safe.
 % This demonstrates that instructions that were considered safe by some techniques are not necessarily safe when the CPU is integrated into a platform that contains a cache.
@@ -19,7 +19,7 @@ We use the 2-stage Sodor RISC-V CPU~\cite{sodor}, which is a simple CPU commonly
 \subsection{\PICI implementation}
 \label{subsec:pici_impl}
 
-The limited interface between the CPU and the platform makes the \PICIs simple, as earlier illustrated in Figure~\ref{fig:pic_instrum_taints} and Figure~\ref{fig:pic_instrum_miter}.
+The limited interface between the CPU and the platform makes the \PICIs simple, as earlier illustrated in Fig.~\ref{fig:pic_instrum_taints} and Fig.~\ref{fig:pic_instrum_miter}.
 We implement a Yosys synthesizer pass~\cite{wolf2013yosys} that instruments a CPU that is either instrumented with taint tracking logic such as GLIFT~\cite{tiwari2009complete} or CellIFT~\cite{solt2022cellift}, or part of a miter construct.
 The synthesizer pass takes as input a Verilog description of the CPU under test in one of these two configurations (instrumented for taint tracking or in a miter) and outputs a Verilog design instrumented with the \PICI.
 In addition to the CPU's Verilog description, the synthesizer pass takes a conditional contract as input, similar to the contracts presented in Section~\ref{sec:reentrant}, and takes a machine-readable description of the CPU's interface ports.
@@ -30,7 +30,7 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
     \begin{center}
     \includegraphics[width=0.80\columnwidth]{figures/simple_soc/simple_soc.pdf}
     \end{center}
-    \vspace*{-1em}
+    \vspace*{-1.2em}
     \caption{\label{fig:simple_soc} Simple SoC architecture with a CPU, a cache, and memory.}
     \vspace*{-1.4em}
 \end{figure}
@@ -38,7 +38,7 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
 \begin{table}[t]
     \vspace*{1.2em}
     \centering
-    \caption{Verification results for the original (O) Sodor and Kronos, and for \PICI-instrumented (P) Sodor and Kronos for the contract C3. Results are "pass" if all memory instructions are considered safe with regard to all their operands (and in particular with regard to the address when it comes to loads and stores).
+    \caption{Verification results for the original (O) Sodor and Kronos, and for \PICI-instrumented (P) Sodor and Kronos for the contract C3. Results are ``pass'' if all memory instructions are considered safe with regard to all their operands (and in particular with regard to the address when it comes to loads and stores).
     Time indicates time to obtain a proof for a subset of instructions that excludes memory instructions if they are shown to be non-constant-time.
     The time shown for \ucfi is the mean time to prove an instruction.}
     \vspace*{-.4em}
@@ -69,7 +69,7 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
 \subsection{Soundness improvement with \PICI}
 \label{subsec:pici_platform}
 
-We have shown that the security guarantees provided by \ucfi and VeloCT may not hold when the CPU is integrated into a platform that contains caches or other elements that have an address-dependent timing, for example described by the contract defined in Equation~\ref{dict:contract_cache_nointerrupt}.
+We have shown that the security guarantees provided by \ucfi and VeloCT may not hold when the CPU is integrated into a platform that contains caches or other elements that have an address-dependent timing, for example described by Contract C2.
 % Sodor is a simple CPU core that belongs to LeaVe's and CSL's constant-time verification testbench.
 % \fls{Abrupt introduction of Sodor.}
 We first verified Sodor with \ucfi and VeloCT (ConjunCT is not open-source but is superseded by VeloCT).
@@ -80,7 +80,7 @@ As a result, the \PICI automatically transforms the verification of a CPU in iso
 
 % \begin{table}[t]
 %     \centering
-%     \caption{Verification of the compliance of platforms to \PICI. SimpleSoC is depicted in Figure~\ref{fig:simple_soc}, exempt of Sodor.}
+%     \caption{Verification of the compliance of platforms to \PICI. SimpleSoC is depicted in Fig.~\ref{fig:simple_soc}, exempt of Sodor.}
 %     \small
 %     \begin{tabular}{|l|c|c|}
 %         \hline
@@ -128,15 +128,15 @@ As a result, the \PICI automatically transforms the verification of a CPU in iso
 Finally, we verify the compliance of the platform with the \pic.
 Because these contracts specify a form of non-interference, they can be verified conveniently with miter constructs, similar to how most techniques verify constant-time properties for CPUs~\cite{dinesh2024conjunct,dinesh2025h,wang2023specification,tan2025contractshadowlogic}.
 We verify three platforms.
-The \texttt{cache} platform is a simple SoC architecture composed of a CPU, a set-associative cache and memory, as depicted in Figure~\ref{fig:simple_soc}.
+The \texttt{cache} platform is a simple SoC architecture composed of a CPU, a set-associative cache and memory, as depicted in Fig.~\ref{fig:simple_soc}.
 The \texttt{nocache} platform is like the \texttt{cache} platform, but the cache is removed, connecting the CPU directly to the memory, which is modeled as having no address-dependent latency.
 The \texttt{interrupt} platform is like the \texttt{cache} platform, but also adds an uncached interrupt controller at the address \texttt{0x1000}, which generates an interrupt signal when a non-zero value is written to this address.
-For each of these platforms, we verify Contract A that we define as in Equation~\ref{dict:contract_cache_nointerrupt}, Contract B that we define as in Equation~\ref{dict:contract_cache_interrupt}, Contract C that we define as in Equation~\ref{dict:contract_cache_interrupt_addressdependent} where we constrain \texttt{periph\_range} to be \texttt{0x1000} to \texttt{0x1000}, and Contract D that is like Contract C but with a \texttt{periph\_range} of \texttt{0x2000} to \texttt{0x2FFF}.
+For each of these platforms, we verify Contracts C1-C4 where we constrain \texttt{periph\_range} to be \texttt{0x1000} to \texttt{0x1000}, and Contract D that is like Contract C but with a \texttt{periph\_range} of \texttt{0x2000} to \texttt{0x2FFF}.
 % \fls{TODO Check the mem range for Caliptra.}
 % \fls{TODO Say that the caliptra contract proves that the ICCM and DCCM indeed do not have timing side channels, as expected}
 We construct miters whose designs under test is the platform seen from the CPU's perspective, i.e., whose inputs are the outputs of the CPU, and whose outputs are the inputs of the CPU.
 Note that the CPU itself is not part of this miter.
-To verify, for example, the last arrow of Equation~\ref{dict:contract_cache_interrupt_addressdependent}, we enforce all inputs of the miter to be identical between the two sides of the miter except for the \texttt{mem\_wdata} input, and we additionally constrain the \texttt{mem\_addr} input, identical between the two sides of the miter, not to be in the \texttt{periph\_range} range.
+To verify, for example, the last arrow of Contract C4, we enforce all inputs of the miter to be identical between the two sides of the miter except for the \texttt{mem\_wdata} input, and we additionally constrain the \texttt{mem\_addr} input, identical between the two sides of the miter, not to be in the \texttt{periph\_range} range.
 We then verify that only \texttt{mem\_rdata} can be affected by changes to \texttt{mem\_wdata} by \texttt{xor}'ing the outputs of \texttt{mem\_gnt} for the two copies of the platform in the miter together and expressing a SAT formula on this signal, which should never be set.
 Table~\ref{tab:verif_platform_compliance_results} summarizes the verification results obtained with Cadence Jaspergold for the different platforms.
 The total duration of the experiment does not exceed one minute.
