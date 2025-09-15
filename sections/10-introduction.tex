@@ -21,12 +21,12 @@ Such observer modes depend on platform-level features (e.g., SoC components), ye
 \para{Platform timing contracts}
 We introduce platform timing contracts to extend hardware-software contracts to the broader system context in which a CPU operates.
 % 
-These contracts aim to capture the timing behavior of the entire platform, including interactions with other components such as memory controllers, I/O devices, interconnects and caches.
-By considering these interactions, platform timing contracts can provide a more comprehensive understanding of potential timing channels and of the resulting security implications.
+These contracts provide a language to express the expected timing behavior of the entire platform, including interactions with other components such as memory controllers, I/O devices, and caches.
+By considering these interactions, platform timing contracts provide a comprehensive understanding of potential timing channels and of the resulting security implications.
 To verify the confidentiality guarantees of a CPU integrated into a specific platform using existing techniques that verify a CPU in isolation, we introduce an automatic instrumentation that captures platform-specific timing information while retaining compatibility with all existing hardware-software contract verification techniques.
 
-We apply the instrumentation the 2-stage Sodor~\cite{sodor} and the 3-stage Kronos~\cite{kronos} RISC-V CPUs, which have been commonly used in constant-time verification benchmarks~\cite{wang2023specification,tan2025contractshadowlogic,ceesay2024mucfi}.
-Not only does the verification time not increase significantly when applying the instrumentation if no violation is found, but we demonstrate the existence of platform-specific timing channels on typical platforms, that would otherwise be missed by some existing verification techniques.
+We apply the instrumentation to the 2-stage Sodor~\cite{sodor} and the 3-stage Kronos~\cite{kronos} RISC-V CPUs, which have been commonly used in constant-time verification benchmarks~\cite{wang2023specification,tan2025contractshadowlogic,ceesay2024mucfi}.
+Not only does the verification time not increase significantly when applying the instrumentation if no violation is found, but we demonstrate the existence of platform-specific timing channels on typical platforms that would otherwise be missed by some existing verification techniques.
 
 In summary, our contributions in this paper are:
 \begin{itemize}

@@ -2,7 +2,7 @@
 % \fls{TODO Continue here}
 In this section, we express these contracts as a synthesizable \pici (\PICI).
 Because it must materialize an information flow property, the \PICI cannot be directly applied to the CPU under verification.
-Indeed, in the original CPU before IFT instrumentation or miter construct, the notion of taint~\cite{solt2022cellift,ceesay2024mucfi} or two-trace property~\cite{wang2023specification,dinesh2024conjunct,dinesh2025h,tan2025contractshadowlogic} does not yet exist.
+Indeed, in the original CPU before DIFT instrumentation or a miter construct, the notion of taint~\cite{solt2022cellift,ceesay2024mucfi} or two-trace property~\cite{wang2023specification,dinesh2024conjunct,dinesh2025h,tan2025contractshadowlogic} does not yet exist.
 Instead, the \PICI is applied to the construct that supports information flows, which is either a circuit with DIFT instrumentation, or a miter (see Section~\ref{subsec:ift}).
 
 \para{Sticky-one operator}
@@ -11,7 +11,7 @@ It models the diamond $\lozenge$ operator in the instrumentations by making its 
 Its output returns to zero only when the system is reset.
 
 \para{\PICI for DIFT}
-For a CPU instrumented with DIFT~\cite{tiwari2009complete,solt2022cellift}, we materialize contract information flows (i.e., arrows ``$\rightarrow$'' in a given contract) from a CPU output signal to a CPU input signal as a wire between the two corresponding taint signals, where a sticky-one operator accommodates for information flows that might eventually occur (i.e., the $\lozenge$ operator).
+For a CPU instrumented with DIFT~\cite{tiwari2009complete,solt2022cellift}, we materialize contract information flows (i.e., arrows ``$\rightarrow$'' in a given contract) from a CPU output signal to a CPU input signal as a wire between the two corresponding taint signals, where a sticky-one operator accommodates information flows that might eventually occur (i.e., the $\lozenge$ operator).
 When multiple CPU outputs have a contract information flow to a single CPU input signal (i.e., there are several arrows ``$\rightarrow$'' in the contract whose right-hand set contains the same input signal), the corresponding taint signals are \texttt{OR}'ed together, meaning that the input signal can be influenced by any of these output signals.
 The \PICI for Contract C4 is shown in Fig.~\ref{fig:pic_instrum_taints} for DIFT.
 

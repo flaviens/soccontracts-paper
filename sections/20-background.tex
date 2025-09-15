@@ -52,8 +52,8 @@ Hardware information flows capture properties such as confidentiality and integr
 They are typically tracked using one of two techniques.
 The first technique is called dynamic information flow tracking (DIFT).
 It captures information flows by augmenting the hardware design under test (DUT) with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Fig.~\ref{fig:glift}.
-The second technique is called miter circuit.
-It captures information flows by comparing the outputs of two copies of the DUT, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Fig.~\ref{fig:miter}.
+The second technique is called a miter circuit.
+It captures information flows by comparing the outputs of two copies of the DUT, where all inputs except the sources are unconstrained, while all the others are equal as illustrated in Fig.~\ref{fig:miter}.
 
 \subsection{Hardware-software contracts}
 \label{subsec:hw-sw-contracts}

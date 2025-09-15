@@ -1,4 +1,4 @@
-In this section, we first present the \PICI implementation (Section~\ref{subsec:pici_impl}), evaluate its performance and the resulting soundness improvement (Section~\ref{subsec:pici_platform_eval}), and finally verify the compliance of several platforms to the \pics discussed in this paper (Section~\ref{subsec:pici_platform_verif}).
+In this section, we first present the \PICI implementation (Section~\ref{subsec:pici_impl}), evaluate its performance and the resulting soundness improvement (Section~\ref{subsec:pici_platform_eval}), and finally verify the compliance of several platforms with the \pics discussed in this paper (Section~\ref{subsec:pici_platform_verif}).
 % For comprehensiveness, we then also  verify that not only the CPU, but also the rest of the platform complies with its own contract terms, i.e., that a platform will not propagate more taint than what the contract stipulates~(Section~\ref{subsec:pici_platform}).
 
 \para{Evaluation setup}
@@ -146,6 +146,6 @@ For each of these platforms, we verify Contracts C1-C4 with \texttt{periph\_rang
 We construct miters whose DUT is the platform seen from the CPU's perspective, i.e., whose input signals are the CPU output signals, and whose output signals are the CPU input signals.
 Note that the CPU itself is not part of this miter.
 To verify, for example, the last arrow of Contract C4, we enforce all inputs of the miter to be identical between the two sides of the miter except for the \texttt{mem\_wdata} input, and we additionally constrain the \texttt{mem\_addr} input, identical between the two sides of the miter, not to be in \texttt{periph\_range}.
-We then verify that only \texttt{mem\_rdata} can be affected by changes to \texttt{mem\_wdata} by \texttt{xor}'ing the outputs of \texttt{mem\_gnt} for the two copies of the platform in the miter together and expressing a SAT formula on this signal, which should not be satisfiable.
+We then verify that only \texttt{mem\_rdata} can be affected by changes to \texttt{mem\_wdata} by \texttt{XOR}'ing the outputs of \texttt{mem\_gnt} for the two copies of the platform in the miter together and expressing a SAT formula on this signal, which should not be satisfiable.
 Table~\ref{tab:verif_platform_compliance_results} summarizes the verification results obtained with Cadence Jaspergold for the different platforms.
 The total duration of the experiment does not exceed one minute.

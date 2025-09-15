@@ -1,6 +1,6 @@
 Variations in the time required by a computer to perform computations can leak confidential information.
 Constant-time programming techniques defend against such timing attacks, but make assumptions on the behavior of the underlying hardware.
-As a response, previous work has introduced several techniques for verifying CPU compliance with hardware-software contracts.
+In response, previous work has introduced several techniques for verifying CPU compliance with hardware-software contracts.
 %
 However, selecting which hardware-software contract to verify is non-trivial and requires careful consideration of the system's architecture and the specific timing attacks it may face.
 If a CPU is integrated into a platform that creates more timing channels than expected by a contract, CPU verification against this contract may be insufficient to guarantee security.
