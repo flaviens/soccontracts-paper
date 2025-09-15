@@ -5,7 +5,7 @@ As a response, previous work has introduced several techniques for verifying CPU
 However, selecting which hardware-software contract to verify is non-trivial and requires careful consideration of the system's architecture and the specific timing attacks it may face.
 If a CPU is integrated into a platform that creates more timing channels than expected by a contract, CPU verification against this contract may be insufficient to guarantee security.
 In this paper, we address the integration of a verified constant-time CPU into a larger system.
-We make three contributions: (1) we define \pics as a formal way to capture an upper bound of the platform-induced timing channels, (2) we design a low-overhead synthesizable instrumentation that materializes these contracts and is compatible with existing CPU verification methods, and (3) we demonstrate that this instrumentation can detect bugs that existing CPU verification methods would miss when the CPU is integrated into a larger system.
+We make three contributions: (1) we define \pics as a language to express expected platform-induced timing channels, (2) we design a low-overhead synthesizable instrumentation that materializes these contracts and is compatible with the existing CPU verification methods, and (3) we demonstrate that this instrumentation can detect bugs that some existing CPU verification methods would miss when the CPU is integrated into a larger system.
 % existing CPU verification techniques alone fail under integration, whereas \pics enable stronger, system-wide security guarantees against timing attacks.
 
 % We introduce platform timing contracts, a novel abstraction that specifies an upper bound on timing channels introduced by platform integration.

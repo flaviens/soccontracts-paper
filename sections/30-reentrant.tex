@@ -3,6 +3,7 @@ We then discuss and formalize reentrant information flows.
 Finally, we introduce platform integration contracts to capture these reentrant flows.
 
 \subsection{Motivational example}
+\label{sec:reentrant:motivational}
 
 \begin{figure}[t]
     \begin{center}
@@ -215,7 +216,7 @@ A CPU that is verified to have a constant-time behavior with respect to a strong
     \caption{\Pici for Contract C4 for a design whose information flows are tracked with dynamic information flow tracking instrumentation. Signals that end with \texttt{t0} represent the taint signals~\cite{tiwari2009complete,solt2022cellift}.
     }
     \label{fig:pic_instrum_taints}
-    \vspace*{-1.5em}
+    \vspace*{-.5em}
 \end{figure}
 
 \begin{figure}[t]

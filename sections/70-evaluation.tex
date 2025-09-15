@@ -1,9 +1,9 @@
-In this section, we first present the \PICI implementation and evaluate its performance and the resulting soundness improvement~(Section~\ref{subsec:pici_impl}).
-For comprehensiveness, we then also  verify that not only the CPU, but also the rest of the platform complies with its own contract terms, i.e., that a platform will not propagate more taint than what the contract stipulates~(Section~\ref{subsec:pici_platform}).
+In this section, we first present the \PICI implementation (Section~\ref{subsec:pici_impl}), evaluate its performance and the resulting soundness improvement (Section~\ref{subsec:pici_platform_eval}), and finally verify the compliance of several platforms to the \pics discussed in this paper (Section~\ref{subsec:pici_platform_verif}).
+% For comprehensiveness, we then also  verify that not only the CPU, but also the rest of the platform complies with its own contract terms, i.e., that a platform will not propagate more taint than what the contract stipulates~(Section~\ref{subsec:pici_platform}).
 
 \para{Evaluation setup}
 We execute the performance evaluations on a server equipped with an Intel Xeon E5-2667 CPU with 256\,GB RAM.
-We use the 2-stage Sodor RISC-V CPU~\cite{sodor}, which is a simple CPU commonly used in constant-time verification benchmarks~\cite{wang2023specification,tan2025contractshadowlogic}.
+We use the 2-stage Sodor CPU~\cite{sodor} (commit \texttt{32d49f9}) and the 3-stage Kronos CPU~\cite{kronos} (commit \texttt{13678d4}), which are simple RISC-V CPUs already used in previous constant-time verification benchmarks~\cite{wang2023specification,tan2025contractshadowlogic,ceesay2024mucfi}.
 
 % \para{The problem with a CPU in isolation}
 % We now show that techniques can be unsound because the SoC integration is not considered.
@@ -22,7 +22,8 @@ We use the 2-stage Sodor RISC-V CPU~\cite{sodor}, which is a simple CPU commonly
 The limited interface between the CPU and the platform makes the \PICIs simple, as earlier illustrated in Fig.~\ref{fig:pic_instrum_taints} and Fig.~\ref{fig:pic_instrum_miter}.
 We implement a Yosys synthesizer pass~\cite{wolf2013yosys} that instruments a CPU that is either instrumented with taint tracking logic such as GLIFT~\cite{tiwari2009complete} or CellIFT~\cite{solt2022cellift}, or part of a miter construct.
 The synthesizer pass takes as input a Verilog description of the CPU under test in one of these two configurations (instrumented for taint tracking or in a miter) and outputs a Verilog design instrumented with the \PICI.
-In addition to the CPU's Verilog description, the synthesizer pass takes a conditional contract as input, similar to the contracts presented in Section~\ref{sec:reentrant}, and takes a machine-readable description of the CPU's interface ports.
+In addition to the CPU's Verilog description, the synthesizer pass takes a conditional contract as input, with a syntax similar to the one used in Fig.~\ref{fig:contract_equations}, and takes a machine-readable description of the CPU's interface ports.
+The instrumentation process takes a few seconds, including the boilerplate time taken by Yosys to process the designs.
 % The \PICI synthesizer pass is made of around 500 lines of C++ code.
 % \fls{TODO: Give an example contract in appendix and of the CPU interface ports file.}
 
@@ -38,12 +39,12 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
 \begin{table}[t]
     \vspace*{1.2em}
     \centering
-    \caption{Verification results for the original (O) Sodor and Kronos, and for \PICI-instrumented (P) Sodor and Kronos for the contract C3. Results are ``pass'' if all memory instructions are considered safe with regard to all their operands (and in particular with regard to the address when it comes to loads and stores).
-    Time indicates time to obtain a proof for a subset of instructions that excludes memory instructions if they are shown to be non-constant-time.
-    The time shown for \ucfi is the mean time to prove an instruction.}
+    \caption{Verification results for the original (O) Sodor and Kronos, and for \PICI-instrumented (P) Sodor and Kronos for Contract C3. Results are ``pass'' if all memory instructions are considered safe with regard to all their operands (in particular with regard to the address).
+    Time indicates the time to obtain a proof for a subset of instructions that excludes memory instructions if they are shown to be non-constant-time.
+    The time shown for \ucfi is the mean across instructions.}
     \vspace*{-.4em}
     \small
-    \begin{tabular}{|l|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
         \hline
         \rowcolor{gray!20}
         & \multicolumn{2}{c|}{\textbf{\ucfi}} & \multicolumn{2}{c|}{\textbf{VeloCT}} \\
@@ -55,7 +56,7 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
         \hline
         Result (O) & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} \\
         \hline
-        Time (P) & 10\,min & 31\,min & 1\,min & 1\,min \\
+        Time (P) & 8\,min & 31\,min & 1\,min & 1\,min \\
         \hline
         Result (P) & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} \\
         \hline
@@ -67,16 +68,16 @@ In addition to the CPU's Verilog description, the synthesizer pass takes a condi
 
 
 \subsection{Soundness improvement with \PICI}
-\label{subsec:pici_platform}
+\label{subsec:pici_platform_eval}
 
-We have shown that the security guarantees provided by \ucfi and VeloCT may not hold when the CPU is integrated into a platform that contains caches or other elements that have an address-dependent timing, for example described by Contract C2.
+We have shown in Section~\ref{sec:reentrant:motivational} that the security guarantees provided by VeloCT, and similarly with \ucfi, may not hold when the CPU is integrated into a platform that contains elements with address-dependent timing such as caches.
 % Sodor is a simple CPU core that belongs to LeaVe's and CSL's constant-time verification testbench.
 % \fls{Abrupt introduction of Sodor.}
-We first verified Sodor with \ucfi and VeloCT (ConjunCT is not open-source but is superseded by VeloCT).
-We now instrument Sodor with the \PICI and verify it again with the same tools.
+We first verify Sodor and Kronos with \ucfi and VeloCT (ConjunCT is not open-source but its authors affirmed that it is superseded by VeloCT).
+We then instrument Sodor and Kronos with the \PICI and verify them again.
 We report the verification results, as well as the time taken by each tool to formulate a proof in Table~\ref{tab:verif_results_simple_soc}.
+The difference in verification time with and without the \PICI is not significant.
 We observe that the \PICI indeed can correct the unsoundness of \ucfi and VeloCT with regard to the platform integration such as cache side channels.
-As a result, the \PICI automatically transforms the verification of a CPU in isolation into a verification of a CPU in a contract-compliant platform.
 
 % \begin{table}[t]
 %     \centering
@@ -106,25 +107,29 @@ As a result, the \PICI automatically transforms the verification of a CPU in iso
 \begin{table}[t]
     \centering
     \caption{Verification of the compliance of platforms to \PICI.}
+    \vspace*{-.4em}
     \small
-    \begin{tabular}{|r|c|c|c|}
+    \begin{tabular}{|c|c|c|c|}
         \hline
         \rowcolor{gray!20} % Color for the table header
         \textbf{Contract} & \texttt{nocache} & \texttt{cache} & \texttt{interrupt} \\
         \hline
-        A & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} \\
+        C1 & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} & Fail \textcolor{red}{\rcross} \\
         \hline
-        B & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} \\
+        C2 & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} \\
         \hline
-        C & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} \\
+        C3 & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} \\
         \hline
-        D & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} \\       \hline
+        C4 & Pass \textcolor{green}{\gcheck} & Pass \textcolor{green}{\gcheck} & Fail \textcolor{red}{\rcross} \\       \hline
     \end{tabular}
     \label{tab:verif_platform_compliance_results}
+    \vspace*{-.4em}
 \end{table}
 
 
-\para{Platform verification}
+\subsection{Platform verification}
+\label{subsec:pici_platform_verif}
+
 Finally, we verify the compliance of the platform with the \pic.
 Because these contracts specify a form of non-interference, they can be verified conveniently with miter constructs, similar to how most techniques verify constant-time properties for CPUs~\cite{dinesh2024conjunct,dinesh2025h,wang2023specification,tan2025contractshadowlogic}.
 We verify three platforms.
@@ -140,7 +145,3 @@ To verify, for example, the last arrow of Contract C4, we enforce all inputs of 
 We then verify that only \texttt{mem\_rdata} can be affected by changes to \texttt{mem\_wdata} by \texttt{xor}'ing the outputs of \texttt{mem\_gnt} for the two copies of the platform in the miter together and expressing a SAT formula on this signal, which should never be set.
 Table~\ref{tab:verif_platform_compliance_results} summarizes the verification results obtained with Cadence Jaspergold for the different platforms.
 The total duration of the experiment does not exceed one minute.
-\fls{TODO report the simulation results for no violation found.}
-
-\fls{Takeaway box: Given a platform specification, \PICI includes reentrant information flows in the verification of constant-time properties, even if the underlying verification technique initially did not account for them}
-% \takeawayBox{Given a platform specification, \PICI includes reentrant information flows in the verification of constant-time properties, even if the underlying verification technique initially did not account for them.}

@@ -1,20 +1,18 @@
 % !TeX root = ../main.tex
 % !TeX spellcheck = en_US
 
-\fls{Mention the bug of fastpath.}
-
 Timing side-channel attacks exploit variations in execution time to leak secrets through measurable side effects.
 By carefully choreographing benign-looking instruction sequences, an attacker can steer microarchitectural state, such as caches, TLBs, execution ports, or branch predictors to make secret-dependent effects externally observable.
-Two broad families have emerged: transient/speculative-execution attacks~\cite{kocher2019spectre,lipp2018meltdown,van2019ridl,ragab2021rage,wikner2022retbleed,wikner2025bpi}, which leave secret-dependent footprints during mis-speculated execution, and contention-driven channels~\cite{bernstein2005cache,Liu2015LLC,YaromFalkner2014FlushReload,Yarom2016CacheBleed,Moghimi2018MemJam,Gruss2016PrefetchSCA}, which measure interference to encode information.
+Two broad families have emerged: transient and speculative execution attacks~\cite{kocher2019spectre,lipp2018meltdown,van2019ridl,ragab2021rage,wikner2022retbleed,wikner2025bpi}, which leave secret-dependent footprints during mis-speculated execution, and contention-driven channels~\cite{bernstein2005cache,Liu2015LLC,YaromFalkner2014FlushReload,Yarom2016CacheBleed,Moghimi2018MemJam,Gruss2016PrefetchSCA}, which measure interference to encode information.
 These attacks can often be mounted entirely in software, without special privileges or hardware access.
 Mitigation is notoriously difficult after fabrication.
-Software or microcode defenses are often partial~\cite{ridlad} or impose significant overheads~\cite{herzog2021price}.
+Software or microcode defenses are often partial~\cite{ridlad} and impose significant overheads~\cite{herzog2021price}.
 % 
 To address these challenges, recent work introduced hardware-software contracts, which inform developers about the side effects of their code on a CPU~\cite{guarnieri2021hardware,oleksenko2022revizor}.
-As a result, several techniques have been proposed to formally verify that a CPU implementation complies with such contracts~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} to prevent confidentiality breaches before chip fabrication.
+As a result, several techniques have been proposed to formally verify that a CPU implementation complies with such contracts~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} to prevent unexpected confidentiality breaches before fabrication.
 
 \para{Platform timing channels}
-CPUs are often verified in isolation~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} against hardware-software contracts before integration into a larger system, both for scalability and because the exact specifications of the integrating platforms are usually unknown during CPU design and verification.
+CPUs are often verified in isolation~\cite{dinesh2024conjunct,dinesh2025h,ceesay2024mucfi,wang2023specification,tan2025contractshadowlogic,hsiao2024rtl2mmupath} against hardware-software contracts before integration into a larger system, both for scalability and because the exact RTL implementations of the integrating platforms are usually unknown during CPU design and verification.
 However, hardware-software contracts inherently assume a specific system context. When verification ignores this context, the results may not hold once the CPU is integrated into a platform.
 For example, the constant-time contract observer mode~\cite{guarnieri2021hardware} exposes the program counter and all memory-access addresses, capturing timing effects of caches and of the memory hierarchy~\cite{guarnieri2021hardware,oleksenko2022revizor}.
 Other modes, such as the architectural observer, reveal even more detail by also disclosing values exchanged with memory.
@@ -22,25 +20,26 @@ Such observer modes depend on platform-level features (e.g., SoC components), ye
 
 \para{Platform timing contracts}
 We introduce platform timing contracts to extend hardware-software contracts to the broader system context in which a CPU operates.
-
-These contracts aim to capture the timing behavior of the entire platform, including interactions with other components such as memory controllers, I/O devices, and interconnects.
-By considering these interactions, platform timing contracts can provide a more comprehensive understanding of potential timing channels and the resulting security implications.
+% 
+These contracts aim to capture the timing behavior of the entire platform, including interactions with other components such as memory controllers, I/O devices, interconnects and caches.
+By considering these interactions, platform timing contracts can provide a more comprehensive understanding of potential timing channels and of the resulting security implications.
 To verify the confidentiality guarantees of a CPU integrated into a specific platform using existing techniques that verify a CPU in isolation, we introduce an automatic instrumentation that captures platform-specific timing information while retaining compatibility with all existing hardware-software contract verification techniques.
 
-We apply the instrumentation corresponding to each platform to the RISC-V Sodor CPU, which is commonly used in constant-time verification benchmarks.
-Not only does the verification time not increase significantly when applying the instrumentation if no violation is found, but we demonstrate the existence of platform-specific timing channels on typical platforms, that would otherwise be missed.
+We apply the instrumentation the 2-stage Sodor~\cite{sodor} and 3-stage Kronos~\cite{kronos} CPUs, which have been commonly used in constant-time verification benchmarks~\cite{wang2023specification,tan2025contractshadowlogic,ceesay2024mucfi}.
+Not only does the verification time not increase significantly when applying the instrumentation if no violation is found, but we demonstrate the existence of platform-specific timing channels on typical platforms, that would otherwise be missed by some existing verification techniques.
 
 In summary, our contributions in this paper are:
 \begin{itemize}
     \item We introduce \pics that summarize platform-specific timing behaviors.
     
-    \vspace{0.5em}
+    % \vspace{0.5em}
     \item We implement an open-source lightweight CPU instrumentation that accounts for all platform-induced timing side-channels for a given \pic.
     
-    \vspace{0.5em}
+    % \vspace{0.5em}
     \item We apply instrumentations corresponding to various platforms to the RISC-V Sodor CPU to capture platform-specific timing information and show that these platforms can introduce unique timing channels that may not be present in isolated CPU verification and that would be missed by some existing verification techniques.
 \end{itemize}
 
 % \vspace*{0.5em}
 \para{Open sourcing}
-All our experiments can be found at: \url{https://placeholder/} 
+All our experiments can be found at: \\
+\url{https://placeholder/} 

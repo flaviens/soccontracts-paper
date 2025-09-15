@@ -29,7 +29,7 @@
 % Thanks Patrick-san for the snippet
 \usepackage{ifthen}
 \newboolean{EnableTodoNotes}
-\setboolean{EnableTodoNotes}{true}  % <<< set this to "false" to disable todos
+\setboolean{EnableTodoNotes}{false}  % <<< set this to "false" to disable todos
 \ifthenelse{\boolean{EnableTodoNotes}}{%
   \usepackage[colorinlistoftodos,prependcaption,obeyFinal,textsize=footnotesize]{todonotes}
   \paperwidth=\dimexpr \paperwidth + 6cm\relax
