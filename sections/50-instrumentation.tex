@@ -17,12 +17,10 @@ When multiple CPU outputs have a contract information flow to a single CPU input
 The \PICI for Contract C4 is shown in Fig.~\ref{fig:pic_instrum_taints} when relying on DIFT instrumentation.
 
 \para{\PICI for miter constructs}
-\fls{TODO Continue here.}
-We first construct the \PICI for a CPU that relies on a miter construct, the \PICI must ensure that the CPU input signals that are influenced by the CPU output signals are distinct between the two copies of the CPU.
-This is achieved using \texttt{XOR} operations between the CPU outputs of the two copies.
-Ultimately, another \texttt{XOR} operation with the result of this difference is performed with the input signal, deciding whether for a given input signal, the two copies of the CPU will receive the same input, or one copy will receive a flipped input.
-Note that there is no conceptual difference between the \PICI for a DIFT instrumentation and the \PICI for a miter construct, yet the former benefits from the abstraction built into the DIFT instrumentation, which allows for a more compact and arguably more intuitive \PICI.
-\fls{TODO Reference figure 8.}
+The \PICI for a miter construct must ensure that the CPU input signals that are influenced by the CPU output signals are distinct between the two copies of the CPU.
+As shown in Fig.~\ref{fig:pic_instrum_miter}, this is achieved using \texttt{XOR} operations between the CPU outputs of the two copies.
+Ultimately, another \texttt{XOR} operation with the result of this difference is performed with the input signal, deciding whether for a given input signal, the two copies of the CPU receive the same input, or one copy receives a flipped input.
+Note that there is no conceptual difference between the \PICI for DIFT or for a miter, yet the former allows for a more compact \PICI.
 
 % \para{Take-away}
 % In Section~\ref{sec:eval}, we will show that when instrumented with the \PICI, the techniques that were originally unable to detect basic timing side-channels due to the verification scope not including caches are now able to detect them.
