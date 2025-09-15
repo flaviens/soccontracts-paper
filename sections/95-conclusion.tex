@@ -1,3 +1,4 @@
-We introduced platform timing contracts as a natural extension of hardware-software contracts to reason about timing channels in full-system contexts rather than isolated CPUs.
-To make such reasoning compatible with existing CPU timing side-channel verification frameworks, we proposed an automatic instrumentation that accounts for platform-specific timing effects.
-Our evaluation shows that this approach incurs minimal verification overhead while uncovering timing channels that would otherwise remain invisible in isolation.
+We introduced platform timing contracts as an extension of hardware-software contracts.
+They provide a language for specifying expected timing channels in full-system contexts rather than isolated CPUs.
+To make such reasoning compatible with existing CPU timing side-channel verification frameworks, we proposed an instrumentation that accounts for platform-specific timing effects.
+Our evaluation shows a negligible verification performance overhead while uncovering timing channels that would otherwise remain invisible in isolation.

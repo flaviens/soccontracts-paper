@@ -1,6 +1,6 @@
-In this section, we first provide a motivational example showing that the integration of a CPU into a system can introduce new timing channels that were not present in isolation.
+In this section, we first provide a motivational example showing that the integration of a CPU into a system can introduce new timing channels that were not present in the CPU in isolation.
 We then discuss and formalize reentrant information flows.
-Finally, we introduce platform integration contracts to capture these reentrant flows.
+Finally, we introduce platform timing contracts to capture these reentrant flows.
 
 \subsection{Motivational example}
 \label{sec:reentrant:motivational}
@@ -39,8 +39,8 @@ This indicates that this time, the CPU is not constant-time secure.
 In particular, this result implies that the program execution timing can depend on secret information used as addresses of memory instructions.
 
 \para{Take-aways}
-These results underline that while constant-time verification techniques typically operate at the level of a CPU in isolation (the entire platform specification might not yet be finalized at the CPU verification time), they may not account for all the potential interactions with other components in the system, such as caches or memory.
-Therefore, the integration of the CPU into a larger system can introduce new timing channels that were not present in isolation and that are not discovered by existing constant-time verification techniques.
+While constant-time verification techniques typically operate at the level of a CPU in isolation (the entire platform specification might not yet be finalized at the CPU verification time), they may not account for all the potential interactions with other components in the system, such as caches or memory.
+Therefore, the integration of the CPU into a larger system can introduce new timing channels that were not present in isolation and that are hence not discovered by some existing constant-time verification techniques.
 
 \subsection{Reentrant flows}
 \label{sec:reentrant:reentrant}
@@ -53,13 +53,13 @@ We denote the subgraph of $G$ that corresponds to the CPU that is integrated in 
 In particular, for all edges $(u, v) \in E_C$, both $u$ and $v$ are vertices in $V_C$.
 We denote the complementary subgraph as $G_{P} = (V_{P}, E_{P})$, where $V_{P} = V \setminus V_C$ and $E_{P} = E \setminus E_C$, corresponding to the platform except the CPU that it integrates.
 
-\para{Constant-time programs \& secret data}
+\para{Constant-time programs and secret data}
 For a given constant-time verification technique, let us denote by $\mathcal{P}$ the set of constant-time programs that are considered for verification.
 The elements of the set $\mathcal{P}$ are triples $\tau = (P, M_p, M_s)$, where $P$ is a constant-time program, $M_p$ is the set of public memory valuations, and $M_s$ is the set of secret values that the program may depend on.
 $\mathcal{P}$ depends on the specific constant-time verification technique being used.
 For example, for ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., belongs to $\mathcal{P}$) if it contains no so-called ``unsafe'' instructions, i.e., instructions that can create an operand-dependent timing channel.
 For Tan et al.~\cite{tan2025contractshadowlogic}, a triple ($P$, $M_p$, $M_s$) is considered constant-time (i.e., belongs to $\mathcal{P}$) if it ensures that the program's control flow and all memory accesses are independent of secret data.
-The conditions for a program to be constant-time with respect to ConjunCT's and VeloCT's definition are stricter than those of Tan et al.~\cite{tan2025contractshadowlogic}, as the latter generally forbid branches, for instance.
+The conditions for a program to be constant-time with respect to ConjunCT's and VeloCT's definition are stricter than those of Tan et al.~\cite{tan2025contractshadowlogic}, as the former generally forbid branches, for instance.
 Inclusively more restrictive constraints imply an inclusively smaller set $\mathcal{P}$ of constant-time programs.
 
 \para{Secret propagation}
@@ -67,7 +67,7 @@ Constant-time verification techniques generally proceed by analyzing whether the
 For example, Tan et al.~\cite{tan2025contractshadowlogic}, LeaVe~\cite{wang2023specification}, ConjunCT~\cite{dinesh2024conjunct} and VeloCT~\cite{dinesh2025h} monitor whether secret information can influence the commit signal, while \ucfi~\cite{ceesay2024mucfi} monitors whether secret information can influence a microarchitectural program counter structure.
 
 We define the \emph{valuation sequence} $\nu$ of a vertex.
-For a vertex $v \in V$ and a triple $\tau = (P, M_p, M_s)$, the valuation sequence $\nu_\tau(v)$ is the clock-accurate infinite sequence of valuations that the vertex takes during the execution of a program $P$ with respect to the memory valuations $M_p$ and $M_s$, starting from the system's reset state, assumed deterministic.
+For a vertex $v \in V$ and a triple $\tau = (P, M_p, M_s)$, the valuation sequence $\nu_\tau(v)$ is the clock-accurate potentially infinite sequence of valuations that the vertex takes during the execution of a program $P$ with respect to the memory valuations $M_p$ and $M_s$, starting from the system's reset state, assumed deterministic.
 Note that we assume determinism for simplicity without loss of generality; to account for non-determinism, we could consider a set $\nu_\tau^{\text{non-det}}(v)$ of all possible valuation sequences instead of a single sequence $\nu_\tau(v)$, without change in the following reasoning.
 
 We denote by $V^s$ the set of vertices in $V$ whose valuation sequence can be influenced by secret information when the system executes a program written in constant-time with respect to the secret data.
@@ -84,8 +84,8 @@ Note that this $u$ also belongs to $V^s\setminus V'$ because all nodes in $p$ ar
 If all paths in $P^s_v$ are reentrant in $G'$, then we say that the vertex $v$ is \emph{fully reentrant} in $G'$.
 
 \para{Example}
-Let us consider again the system Fig.~\ref{fig:verifscopecache} (a) where $\mathcal{P}$ describes programs where secret data, which is for example initially stored in a well-specified memory area, can be used as the address of a memory instruction.
-Because the CPU itself does not contain caches or other components whose timing depends on memory addresses, for $v$ designating the commit signal (for LeaVe~\cite{wang2023specification}, Tan et al.~\cite{tan2025contractshadowlogic}, ConjunCT~\cite{dinesh2024conjunct} or VeloCT~\cite{dinesh2025h}), or a microarchitectural PC signal (\ucfi~\cite{ceesay2024mucfi}), $v$ is fully-reentrant in the CPU, for $G$ describing the whole platform, and $G'$ describing the CPU.
+Let us consider again the system Fig.~\ref{fig:verifscopecache} (a) where $\mathcal{P}$ describes programs where secret data (e.g., stored in a well-specified memory area) can be used as the address of a memory instruction.
+Because the CPU itself does not contain caches or other components with address-dependent timing, for $v$ designating the commit signal (for LeaVe~\cite{wang2023specification}, Tan et al.~\cite{tan2025contractshadowlogic}, ConjunCT~\cite{dinesh2024conjunct} or VeloCT~\cite{dinesh2025h}), or a microarchitectural PC signal (\ucfi~\cite{ceesay2024mucfi}), $v$ is fully-reentrant in the CPU, for $G$ describing the whole platform, and $G'$ describing the CPU.
 
 \subsection{Contracts}
 
@@ -97,13 +97,13 @@ We base our analysis on the widely-studied RISC-V ISA.
 The output signals of a RISC-V CPU are all through memory interfaces, which are made of data and control signals.
 % \fls{TODO Maybe change all "CPU"'s with "CPU core"}
 Data signals transport the data to be read or written to or from the memory.
-Control signals transport the information about the memory transaction, such as the memory address, handshake signals, and depending on the memory bus protocol (e.g., AMBA AXI~\cite{arm_amba} or TileLink~\cite{tilelink_spec}), further control signals such as the type of transaction and the size of the data to be read or written.
+Control signals transport the information about the memory transaction, such as the memory address, handshake signals, and depending on the memory bus protocol (e.g., AMBA AXI~\cite{arm_amba} or TileLink~\cite{tilelink_spec}), further control signals such as the type of transaction and the size of the data to be accessed.
 Input signals of a RISC-V CPU can be more diverse, including memory input data and control signals, interrupt lines, and various other control signals such as clock gating signals.
 
 \para{Platform timing contracts}
 Platform timing contracts aim to ensure that state elements that capture timing differences (e.g., a commit signal or a microarchitectural program counter) \emph{are not fully reentrant} in the CPU.
-To ensure this, a platform timing contract specifies an upper bound of the information flows between the output signals of the CPU and its input signals.
-We express a platform timing contract as a list of rules, listed per CPU output signal.
+Hence, platform timing contracts specify the expected information flows between the output signals of the CPU and its input signals.
+We express a platform timing contract as a list of clauses, listed per CPU output signal.
 % In Section~\ref{sec:instrumentation}, we introduce synthesizable constructs that create paths between secret sources and sinks, to ensure that the sets $P^s_v$ are not empty for these sinks, preventing these sinks from being fully-reentrant.
 % \textcolor{red}{TODO Continuer ici.}
 
@@ -111,14 +111,15 @@ We express a platform timing contract as a list of rules, listed per CPU output 
 \para{Example contracts}
 Fig.~\ref{fig:contract_equations} provides four example contracts for a RISC-V CPU with a Von Neumann architecture.
 We model the memory interface as an outbound address bus (\texttt{addr}), an inbound and an outbound memory data port (respectively \texttt{rdata} and \texttt{wdata}), and a simple valid-ready handshake protocol (inbound \texttt{resp} and outbound \texttt{req}), similar to the \texttt{req} and \texttt{gnt} handshake signals in the Hardware Processing Engines (HWPE) 2.0 interface protocol~\cite{pulpHWPEMem}.
-Fig.~\ref{fig:contract_equations}'s contract C1 defines a simple integration contract for a platform with ideal memory that responds with a constant timing (i.e., that is address-independent).
+Fig.~\ref{fig:contract_equations}'s contract C1 describes a simple platform with ideal memory that responds with a constant timing (i.e., that is address-independent).
 A change in the memory transaction control signals from the CPU can only change the returned value.
 Only the request signal (\texttt{req}) can affect the existence, and hence the timing, of a memory response.
 % Indeed, a change in the address of a read, for example, might read from a memory cell that contains a different value, and a change, for example in the timing of some request signal will affect the timing of the memory response, and hence the memory read data at some point in time.
-The diamond $\lozenge$ underlines that the right-hand side of the implication can happen at any time and for any number of times after the left-hand side.
+The diamond $\lozenge$ underlines that the right-hand side of the implication can \emph{eventually} happen, for any number of times after the left-hand side.
 % \fls{Maybe I should explain more intuitions like why req and addr actually have exactly the same effect.}
-Contract C2 adds timing dependence on the memory address, which is typical of structures like caches.
-In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indeed, a change in the address of a read, for example, can change a cache miss into a cache hit, changing the timing of the response, and hence its value at some point in time, including the \texttt{gmt} control signal and the \texttt{rdata} data signals.
+Contract C2 adds timing dependence on the memory address, which is typical of caches.
+In this contract, \texttt{req} and \texttt{addr} have an identical clause. Indeed, a change in the address of a read, for example, can change a cache miss into a cache hit.
+This changes the timing of the response, and hence its value at some point in time, including the \texttt{gmt} control signal and the \texttt{rdata} data signals.
 Contract C3 models data-dependent interrupts (\texttt{int}) and timing.
 That is, the \emph{reentrant secret propagation paths} (see Section~\ref{sec:reentrant:reentrant}) all go through a specific set of memory addresses only.
 For example, some peripheral might be controlled through memory-mapped registers such as an interrupt controller~\cite{riscv_plic_spec_1_0_0}.
@@ -141,7 +142,7 @@ For example, this can be achieved with RISC-V Physical Memory Protection (PMP) i
     \includegraphics[width=\columnwidth]{figures/contract_equations/contract_equations.pdf}
     \end{center}
     \vspace{-1.8em}
-    \caption{Example platform contracts. The syntax ``$\text{output} \rightarrow \lozenge \{ \text{inputs} \}$'' indicates that taint can eventually flow from this output to these inputs.}
+    \caption{Example platform timing contracts. The syntax ``$\text{output signal} \rightarrow \lozenge \{ \text{input signals} \}$'' indicates that variations in the valuation of this output signal can affect these input signals.}
     \label{fig:contract_equations}
     \vspace*{-1.5em} 
 \end{figure}
@@ -192,9 +193,10 @@ For example, this can be achieved with RISC-V Physical Memory Protection (PMP) i
 
 \para{Ordering of \pics}
 Like for hardware-software contracts~\cite{guarnieri2021hardware}, we can define a partial ordering of \pics.
-We say that a contract A is (inclusively) stronger than a contract B if for every output of the CPU (i.e., the left-hand side of the arrow in the contract), the set of possible CPU inputs tainted by this output in contract A is a subset of the set of possible CPU inputs tainted by this output in contract B.
+We say that a contract A is stronger than a contract B if for every output of the CPU (i.e., the left-hand side of the arrow in the contract), the set of possible CPU inputs tainted by this output in contract A is a subset of the set of possible CPU inputs tainted by this output in contract B.
 Said otherwise, contract A is stronger than contract B if it allows for fewer possible information flows.
-For example, Contract C4 is stronger than Contract C3, and Contract C2 is stronger than Contract C3.
+For example, Contract C4 and Contract C2 are stronger than Contract C3.
+This creates a lattice structure like for hardware-software contracts~\cite{guarnieri2021hardware}.
 A CPU that is verified to have a constant-time behavior with respect to a stronger \pic is also verified with respect to a weaker \pic.
 
 \begin{figure}

@@ -25,7 +25,7 @@ Multiple hardware optimizations, such as caches and branch predictors, learn and
 In particular, the execution time of later instructions may depend on the outcome of earlier instructions.
 For example, accessing a cache line might be faster if the line has been brought into the cache recently by a prior memory access to a nearby location.
 % Timing side channels can result from such optimizations when the timing of a program's execution depends on secret data.
-Constant-time programming techniques, such as not using secret data as array indices, aim to ensure that secrets do not influence the execution time of a program through such channels~\cite{OsvikShamirTromer2006CacheAES,AlmeidaEtAl2016CTVerif}.
+Constant-time programming techniques, such as not using secret data as array indices or loop conditions, aim to ensure that secrets do not influence the execution time of a program through such channels~\cite{OsvikShamirTromer2006CacheAES,AlmeidaEtAl2016CTVerif}.
 
 \subsection{Information Flow Tracking}
 \label{subsec:ift}
@@ -44,16 +44,16 @@ Constant-time programming techniques, such as not using secret data as array ind
     \includegraphics[width=0.5\columnwidth]{figures/miter/miter.pdf}
     \end{center}
     \vspace*{-2em}
-    \caption{\label{fig:miter} Miter circuit. The two instances of the same design under test are supplied with the same public data $p$ and unconstrained $s_1$ and $s_2$ secret data. The output bit $y$ (i.e., instantiated for the instances in the miter as $y_1$ and $y_2$) reveals secret data if $x=1$ is satisfiable.}
+    \caption{\label{fig:miter} Miter circuit. The two instances of the same DUT are supplied with the same public data $p$ and unconstrained $s_1$ and $s_2$ secret data. The output bit $y$ (i.e., instantiated for the instances in the miter as $y_1$ and $y_2$) reveals secret data if $x=1$ is satisfiable.}
     % \vspace*{-1em}
 \end{figure}
 
 Hardware information flows capture properties such as confidentiality and integrity~\cite{hu2021hardware}.
-They are typically captured using one of two techniques.
+They are typically tracked using one of two techniques.
 The first technique is called dynamic information flow tracking (DIFT).
-It captures information flows by augmenting the hardware design under verification with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Fig.~\ref{fig:glift}.
-The second technique is called miter circuits.
-It captures information flows by comparing the outputs of two copies of the design under test, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Fig.~\ref{fig:miter}.
+It captures information flows by augmenting the hardware design under test (DUT) with a synthesizable instrumentation that computes the propagation of taint bits~\cite{tiwari2009complete,ardeshiricham2017register,solt2022cellift,solt2024hybridift,ceesay2024mucfi} as shown in Fig.~\ref{fig:glift}.
+The second technique is called miter circuit.
+It captures information flows by comparing the outputs of two copies of the DUT, where all the inputs except the sources are unconstrained, while all the others are equal as illustrated in Fig.~\ref{fig:miter}.
 
 \subsection{Hardware-software contracts}
 \label{subsec:hw-sw-contracts}
@@ -67,8 +67,7 @@ Under such a contract, the CPU's behavior is summarized as a sequence of observa
 
 \para{Contract verification}
 Multiple independent verification efforts have been conducted to ensure that hardware-software contracts are upheld during program execution, in particular regarding constant-time behavior~\cite{dinesh2024conjunct,ceesay2024mucfi,guarnieri2021hardware,tan2025contractshadowlogic,dinesh2025h,hsiao2024rtl2mmupath,wang2023specification}.
-Most techniques consider a fixed contract~\cite{dinesh2024conjunct,ceesay2024mucfi,tan2025contractshadowlogic,dinesh2025h}.
-Others leverage custom, non-trivial technique-specific insights to verify a wider variety of contracts~\cite{hsiao2024rtl2mmupath,wang2023specification} using the same technique.
+Most techniques consider a fixed contract~\cite{dinesh2024conjunct,ceesay2024mucfi,tan2025contractshadowlogic,dinesh2025h}, while some others leverage custom, non-trivial technique-specific insights to verify a wider variety of contracts~\cite{hsiao2024rtl2mmupath,wang2023specification} using the same technique.
 
 \para{Discussion}
 These techniques make assumptions about the platform in which the CPU is integrated, yet there exists no language for formally expressing and verifying them.
